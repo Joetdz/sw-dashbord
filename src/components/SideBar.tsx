@@ -98,7 +98,7 @@ const data = [
   { link: "/", label: "Accueil", icon: IconHome2 },
   { link: "", label: "Notifications", icon: IconBellRinging },
   { link: "/trips", label: "Courses", icon: IconBrandTripadvisor },
-  { link: "/passagers", label: "Passagers", icon: IconUsers },
+  { link: "/passengers", label: "Passagers", icon: IconUsers },
   { link: "/drivers", label: "Chauffeurs", icon: IconIdBadge2 },
   { link: "/cars", label: "Voitures", icon: IconCar },
   { link: "/services", label: "Services", icon: IconHotelService },
@@ -149,7 +149,7 @@ export function NavbarSimple() {
           className={classes.link}
           onClick={(event) => event.preventDefault()}>
           <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-          <span>Change account</span>
+          <span>Changer de compte</span>
         </a>
 
         <a
@@ -157,7 +157,7 @@ export function NavbarSimple() {
           className={classes.link}
           onClick={(event) => event.preventDefault()}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
+          <span>Déconnexion</span>
         </a>
       </Navbar.Section>
     </Navbar>

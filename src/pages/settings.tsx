@@ -1,13 +1,13 @@
 import React from "react";
 import { NavbarSimple } from "../components/SideBar";
 
-const TripsPage = () => {
+const SettingsPage = () => {
   return (
     <div style={{ display: "flex" }}>
       <NavbarSimple />
-      Trips Page
+      Services Page
     </div>
   );
 };
 
-export default TripsPage;
+export default SettingsPage;

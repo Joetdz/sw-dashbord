@@ -1,13 +1,13 @@
 import React from "react";
 import { NavbarSimple } from "../components/SideBar";
 
-const TripsPage = () => {
+const DriversPage = () => {
   return (
     <div style={{ display: "flex" }}>
       <NavbarSimple />
-      Trips Page
+      Drivers Page
     </div>
   );
 };
 
-export default TripsPage;
+export default DriversPage;
