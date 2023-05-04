@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   createStyles,
   Navbar,
@@ -10,15 +11,18 @@ import {
 } from "@mantine/core";
 import {
   IconBellRinging,
-  IconFingerprint,
-  IconKey,
+  IconCar,
+  IconBrandTripadvisor,
   IconSettings,
-  Icon2fa,
-  IconDatabaseImport,
+  IconHotelService,
   IconReceipt2,
+  IconIdBadge2,
   IconSwitchHorizontal,
   IconLogout,
+  IconHome2,
+  IconUsers,
 } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 // import { MantineLogo } from "@mantine/ds";
 
 const useStyles = createStyles((theme) => ({
@@ -91,40 +95,43 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const data = [
+  { link: "/", label: "Accueil", icon: IconHome2 },
   { link: "", label: "Notifications", icon: IconBellRinging },
-  { link: "", label: "Billing", icon: IconReceipt2 },
-  { link: "", label: "Security", icon: IconFingerprint },
-  { link: "", label: "SSH Keys", icon: IconKey },
-  { link: "", label: "Databases", icon: IconDatabaseImport },
-  { link: "", label: "Authentication", icon: Icon2fa },
-  { link: "", label: "Other Settings", icon: IconSettings },
+  { link: "/trips", label: "Courses", icon: IconBrandTripadvisor },
+  { link: "/passagers", label: "Passagers", icon: IconUsers },
+  { link: "/drivers", label: "Chauffeurs", icon: IconIdBadge2 },
+  { link: "/cars", label: "Voitures", icon: IconCar },
+  { link: "/services", label: "Services", icon: IconHotelService },
+  { link: "/settings", label: "Paramètres", icon: IconSettings },
 ];
 
 export function NavbarSimple() {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState("Billing");
+  const [active, setActive] = useState("Accueil");
+
+  const navigate = useNavigate();
 
   const links = data.map((item) => (
-    <a
+    <Link
       className={cx(classes.link, {
         [classes.linkActive]: item.label === active,
       })}
-      href={item.link}
+      to={`${item.link}`}
       key={item.label}
       onClick={(event) => {
         event.preventDefault();
         setActive(item.label);
+        navigate(`${item.link}`, { replace: false });
       }}>
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
-    </a>
+    </Link>
   ));
 
   return (
     <Navbar height={"100vh"} width={{ sm: 300 }} p="md">
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          {/* <MantineLogo size={28} /> */}
           <Image
             maw={240}
             mx="auto"
