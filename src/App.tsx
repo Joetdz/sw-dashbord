@@ -1,25 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import LoginPage from "./pages/login";
+import HomePage from "./pages/home";
+import CarsPage from "./pages/cars";
+import TripsPage from "./pages/trips";
+import "./App.css";
 
 function App() {
+  const token = localStorage.getItem("gari");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route index path="/" element={token ? <HomePage /> : <LoginPage />} />
+        <Route path="/cars" element={<CarsPage />} />
+        <Route path="/trips" element={<TripsPage />} />
+      </Routes>
+    </>
   );
 }
 
