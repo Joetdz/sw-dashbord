@@ -43,3 +43,14 @@ export const addNewCar = createAsyncThunk("cars/addNewCar", async (content: Cont
         data: content
     }).then((response) => response.data)
 })
+
+
+export const getSingleCar = createAsyncThunk("cars/getSingleCar", async (id: string | undefined) => {
+    return axios({
+        method: "GET",
+        url: `${process.env.REACT_APP_API_URL}cars/${id}`,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then((response) => response.data)
+})

@@ -17,6 +17,7 @@ import {
   IconChevronUp,
   IconSearch,
 } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -147,9 +148,13 @@ export function TableSort({ data }: TableSortProps) {
 
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
-      <td>{row.model}</td>
       <td>
-        {row.prices.km.price} {row.prices.km.currency}
+        <Link to={`/cars/${row.uid}`}>{row.model}</Link>
+      </td>
+      <td>
+        <Link to={`/cars/${row.uid}`}>
+          {row.prices.km.price} {row.prices.km.currency}
+        </Link>
       </td>
     </tr>
   ));

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCars, addNewCar } from "./thunk";
+import { getCars, addNewCar, getSingleCar } from "./thunk";
 
 
 
@@ -16,6 +16,7 @@ interface UsersState {
     isLoading: boolean,
 
     items: string[],
+    singleCarDetails: string
 }
 
 
@@ -30,7 +31,8 @@ const initialState = {
     isUpdating: false,
     new: "",
     items: [],
-    isLoading: false
+    isLoading: false,
+    singleCarDetails: ""
 } as UsersState;
 
 export const carSlice = createSlice({
@@ -85,6 +87,31 @@ export const carSlice = createSlice({
                     ...state,
                     isCreating: false,
                     hasError: true
+                }
+            })
+
+            .addCase(getSingleCar.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(getSingleCar.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                    singleCarDetails: action.payload
+                }
+            })
+        
+            .addCase(getSingleCar.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: true,
                 }
             })
     }
