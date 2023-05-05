@@ -24,6 +24,7 @@ import {
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 // import { MantineLogo } from "@mantine/ds";
+import { useLocation } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -106,15 +107,16 @@ const data = [
 ];
 
 export function NavbarSimple() {
+  const location = useLocation();
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState("Accueil");
+  const [active, setActive] = useState(location.pathname);
 
   const navigate = useNavigate();
 
   const links = data.map((item) => (
     <Link
       className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
+        [classes.linkActive]: item.link === active,
       })}
       to={`${item.link}`}
       key={item.label}
