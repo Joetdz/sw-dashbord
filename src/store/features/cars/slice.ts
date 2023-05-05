@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { getCars, addNewCar, getSingleCar } from "./thunk";
 
 
 
-interface UsersState {
+interface CarState {
     loggedUser: string,
     user: string;
     logging: 'idle' | 'pending' | 'succeeded' | 'failed',
@@ -33,7 +33,7 @@ const initialState = {
     items: [],
     isLoading: false,
     singleCarDetails: ""
-} as UsersState;
+} as CarState;
 
 export const carSlice = createSlice({
     name: "cars",
@@ -106,7 +106,7 @@ export const carSlice = createSlice({
                     singleCarDetails: action.payload
                 }
             })
-        
+
             .addCase(getSingleCar.rejected, (state: any, action) => {
                 return {
                     ...state,
