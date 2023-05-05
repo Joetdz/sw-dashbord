@@ -11,3 +11,35 @@ export const getCars = createAsyncThunk("cars/getCars", async () => {
         }
     }).then((response) => response.data)
 })
+
+
+type Content = {
+    model: string,
+    prices: {
+        km: {
+            price: number,
+            currency: string
+        },
+        hour: {
+            price: number,
+            currency: string
+        },
+        minute: {
+            price: number,
+            currency: string
+        }
+    }
+}
+
+
+export const addNewCar = createAsyncThunk("cars/addNewCar", async (content: Content) => {
+    return axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_API_URL}cars`,
+
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: content
+    }).then((response) => response.data)
+})
