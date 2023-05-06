@@ -62,7 +62,7 @@ const useStyles = createStyles((theme) => ({
         theme.colorScheme === "dark"
           ? theme.colors.dark[6]
           : theme.colors.gray[0],
-      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+      color: theme.colorScheme === "dark" ? "#F9A507" : theme.black,
 
       [`& .${getStylesRef("icon")}`]: {
         color: theme.colorScheme === "dark" ? theme.white : theme.black,
@@ -124,14 +124,20 @@ export function NavbarSimple() {
         event.preventDefault();
         setActive(item.label);
         navigate(`${item.link}`, { replace: false });
-      }}>
+      }}
+      
+    >
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
     </Link>
   ));
 
   return (
-    <Navbar height={"100vh"} width={{ sm: 300 }} p="md">
+    <Navbar
+      height={"100vh"}
+      width={{ sm: 300 }}
+      p="md"
+      sx={{ background: "#0C3966", position: "fixed", color: "#FFFFFF" }}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Image

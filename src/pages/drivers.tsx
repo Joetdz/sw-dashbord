@@ -20,13 +20,13 @@ const DriversPage = () => {
       <NavbarSimple />
       <PageLayoutTemplate>
         {drivers.isLoading ? (
-          <Flex align="center" justify="center" sx={{ height: "100%" }}>
+          <Flex align="center" justify="center" sx={{ height: "100%", width: "100%" }}>
             <Loader />
           </Flex>
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "95%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "70%", margin: "1em auto", height: "100%" }}>
             <DriverTable data={drivers.items} />
           </Flex>
         )}

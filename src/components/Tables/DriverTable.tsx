@@ -95,9 +95,9 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
           <Text fw={500} fz="sm">
             {children}
           </Text>
-          {/* <Center className={classes.icon}>
+          <Center className={classes.icon}>
             <Icon size="0.9rem" stroke={1.5} />
-          </Center> */}
+          </Center>
         </Group>
       </UnstyledButton>
     </th>
@@ -106,9 +106,11 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
-  //   return data.filter((item) =>
-  //     keys(data[0]).some((key) => item.key.toLowerCase().includes(query)),
-  //   );
+  return data.filter((item) =>
+    keys(data[0]).some((key) =>
+      (`${item[key]}` as string).toLowerCase().includes(query),
+    ),
+  );
 }
 
 function sortData(
@@ -121,16 +123,17 @@ function sortData(
     return filterData(data, payload.search);
   }
 
-  //   return filterData(
-  //     [...data].sort((a, b) => {
-  //       if (payload.reversed) {
-  //         return b[sortBy].localeCompare(a[sortBy]);
-  //       }
-
-  //       return a[sortBy].localeCompare(b[sortBy]);
-  //     }),
-  //     payload.search,
-  //   );
+  return filterData(
+    [...data].sort((a, b) => {
+      if (payload.reversed) {
+        return (`${b[sortBy]}` as string).localeCompare(
+          `${a[sortBy]}` as string,
+        );
+      }
+      return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
+    }),
+    payload.search,
+  );
 }
 
 export function DriverTable({ data }: TableSortProps) {
@@ -143,15 +146,16 @@ export function DriverTable({ data }: TableSortProps) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    // setSortedData(sortData(data, { sortBy: field, reversed, search }));
+    setSortedData(sortData(data, { sortBy: field, reversed, search }));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
+
     setSearch(value);
-    // setSortedData(
-    //   sortData(data, { sortBy, reversed: reverseSortDirection, search: value }),
-    // );
+    setSortedData(
+      sortData(data, { sortBy, reversed: reverseSortDirection, search: value }),
+    );
   };
 
   const dispatch = useDispatch<any>();
@@ -195,8 +199,6 @@ export function DriverTable({ data }: TableSortProps) {
       </td>
     </tr>
   ));
-
-  console.log(data);
 
   return (
     <ScrollArea>
@@ -247,18 +249,17 @@ export function DriverTable({ data }: TableSortProps) {
           </tr>
         </thead>
         <tbody>
-          {rows}
-          {/* {rows.length > 0 ? (
+          {rows.length > 0 ? (
             rows
           ) : (
             <tr>
               <td colSpan={Object.keys(data[0]).length}>
                 <Text weight={500} align="center">
-                  Nothing found
+                  Aucun résultat trouvé
                 </Text>
               </td>
             </tr>
-          )} */}
+          )}
         </tbody>
       </Table>
     </ScrollArea>

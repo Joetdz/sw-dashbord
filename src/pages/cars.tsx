@@ -34,7 +34,7 @@ const CarsPage = () => {
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "90%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "90%",left: "300px", margin: "1em auto", height: "100%" }}>
             <Flex>
               <Group position="center">
                 <Button onClick={open}>Ajouter une voiture</Button>
