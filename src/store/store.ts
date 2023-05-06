@@ -3,6 +3,7 @@ import adminSlice from "./features/admins/slice";
 import carSlice from "./features/cars/slice";
 import driverSlice from "./features/drivers/slice";
 import pepoSlice from "./features/pepo/slice";
+import settingSlice from "./features/settings/slice";
 
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
         admin: adminSlice.reducer,
         cars: carSlice.reducer,
         drivers: driverSlice.reducer,
-        pepo: pepoSlice.reducer
+        pepo: pepoSlice.reducer,
+        settings: settingSlice.reducer
     }
 })
