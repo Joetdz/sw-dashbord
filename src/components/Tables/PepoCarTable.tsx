@@ -46,20 +46,8 @@ const useStyles = createStyles((theme) => ({
 interface RowData {
   uid: string;
   model: string;
-  prices: {
-    km: {
-      price: number;
-      currency: string;
-    };
-    hour: {
-      price: number;
-      currency: string;
-    };
-    minute: {
-      price: 1;
-      currency: string;
-    };
-  };
+  price: number;
+  currency: string;
 }
 
 interface TableSortProps {
@@ -98,9 +86,11 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
-    return data.filter((item) =>
-      keys(data[0]).some((key) => (`${item[key]}` as string).toLowerCase().includes(query)),
-    );
+  return data.filter((item) => item  &&
+    keys(data[0]).some((key) =>
+      (`${item[key]}` as string).toLowerCase().includes(query),
+    ),
+  );
 }
 
 function sortData(
@@ -113,19 +103,21 @@ function sortData(
     return filterData(data, payload.search);
   }
 
-    return filterData(
-      [...data].sort((a, b) => {
-        if (payload.reversed) {
-          return (`${b[sortBy]}` as string).localeCompare((`${a[sortBy]}` as string));
-        }
+  return filterData(
+    [...data].sort((a, b) => {
+      if (payload.reversed) {
+        return (`${b[sortBy]}` as string).localeCompare(
+          `${a[sortBy]}` as string,
+        );
+      }
 
-        return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
-      }),
-      payload.search,
-    );
+      return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
+    }),
+    payload.search,
+  );
 }
 
-export function TableSort({ data }: TableSortProps) {
+export function PepoCarTable({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
@@ -153,7 +145,7 @@ export function TableSort({ data }: TableSortProps) {
       </td>
       <td>
         <Link to={`/cars/${row.uid}`}>
-          {row.prices.km.price} {row.prices.km.currency}
+          {row.price} {row.currency}
         </Link>
       </td>
     </tr>
@@ -162,7 +154,7 @@ export function TableSort({ data }: TableSortProps) {
   return (
     <ScrollArea>
       <TextInput
-        placeholder="Rechercher ici"
+        placeholder="Search by any field"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={search}
@@ -182,22 +174,21 @@ export function TableSort({ data }: TableSortProps) {
               Modèle
             </Th>
             <Th
-              sorted={sortBy === "prices"}
+              sorted={sortBy === "price"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("prices")}>
+              onSort={() => setSorting("price")}>
               Prix
             </Th>
           </tr>
         </thead>
         <tbody>
-          
           {rows.length > 0 ? (
             rows
           ) : (
             <tr>
               <td colSpan={Object.keys(data[0]).length}>
                 <Text weight={500} align="center">
-                  Nothing found
+                  Aucun résultat trouvé
                 </Text>
               </td>
             </tr>
