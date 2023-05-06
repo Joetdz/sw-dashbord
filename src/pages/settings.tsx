@@ -3,7 +3,7 @@ import { NavbarSimple } from "../components/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader, Flex, Text, Switch } from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
-import { getSettings } from "../store/features/settings/thunk";
+import { getSettings, updateTaxType } from "../store/features/settings/thunk";
 
 const SettingsPage = () => {
   const [checked, setChecked] = useState(true);
@@ -15,10 +15,10 @@ const SettingsPage = () => {
 
   const settings = useSelector((state: any) => state.settings);
 
-  const [value, setValue] = useState<any>(settings.items.taxType);
+  const [value, setValue] = useState<string>(settings.items.taxType);
 
   const handleChange = () => {
-    return !checked ? "minute" : "hour";
+    return !checked ? setValue("minute") : setValue("hour");
   };
 
   return (
@@ -44,10 +44,13 @@ const SettingsPage = () => {
               checked={checked}
               onLabel="Heure"
               offLabel="Minute"
-              onChange={(event) => {
+              onChange={async (event) => {
                 setChecked(event.currentTarget.checked);
 
                 handleChange();
+
+                await dispatch(updateTaxType("minute"));
+                await dispatch(getSettings());
               }}
               size="xl"
             />

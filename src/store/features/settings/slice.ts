@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSettings } from "./thunk";
+import { getSettings, updateTaxType } from "./thunk";
 
 
 
@@ -59,6 +59,30 @@ export const settingSlice = createSlice({
                     hasError: true
                 }
             })
+
+
+            .addCase(updateTaxType.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: true,
+                    hasError: false
+                }
+            })
+            .addCase(updateTaxType.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: false
+                }
+            })
+            .addCase(updateTaxType.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: true
+                }
+            })
+
 
 
 
