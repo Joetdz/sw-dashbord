@@ -203,7 +203,7 @@ export function DriverTable({ data }: TableSortProps) {
   return (
     <ScrollArea>
       <TextInput
-        placeholder="Search by any field"
+        placeholder="Rechercher ici"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={search}
