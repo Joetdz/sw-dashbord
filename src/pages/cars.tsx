@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Loader } from "@mantine/core";
+import { Loader, Text } from "@mantine/core";
 import { NavbarSimple } from "../components/SideBar";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { TableSort } from "../components/Tables/CarTable";
@@ -34,13 +34,25 @@ const CarsPage = () => {
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "90%",left: "300px", margin: "1em auto", height: "100%" }}>
+            sx={{
+              width: "90%",
+              left: "300px",
+              margin: "1em auto",
+              height: "100%",
+            }}>
             <Flex>
               <Group position="center">
                 <Button onClick={open}>Ajouter une voiture</Button>
               </Group>
             </Flex>
-            <TableSort data={cars.items} />
+
+            {cars.items.length <= 0 ? (
+              <Text>
+                Une erreur s'est produite lors de la reque veuillez réessayer
+              </Text>
+            ) : (
+              <TableSort data={cars.items} />
+            )}
           </Flex>
         )}
       </PageLayoutTemplate>

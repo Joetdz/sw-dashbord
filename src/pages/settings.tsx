@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useForm } from "@mantine/form";
 import { NavbarSimple } from "../components/SideBar";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader, Flex, Text, Switch } from "@mantine/core";
+import {
+  Loader,
+  Flex,
+  Text,
+  Switch,
+  NativeSelect,
+  Button,
+  Select,
+} from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { getSettings, updateTaxType } from "../store/features/settings/thunk";
 
@@ -15,11 +24,17 @@ const SettingsPage = () => {
 
   const settings = useSelector((state: any) => state.settings);
 
-  const [value, setValue] = useState<string>(settings.items.taxType);
+  const [value, setValue] = useState<string>("");
 
   const handleChange = () => {
     return !checked ? setValue("minute") : setValue("hour");
   };
+
+  const form = useForm({
+    initialValues: {
+      taxType: settings.items.taxType,
+    },
+  });
 
   return (
     <div style={{ display: "flex" }}>
@@ -36,11 +51,28 @@ const SettingsPage = () => {
           <Flex
             direction="column"
             sx={{ width: "70%", margin: "1em auto", height: "100%" }}>
-            <Text>
-              Course taxée par :
-              {settings.items.taxType === "hour" ? "Heure" : "Minute"}
-            </Text>
-            <Switch
+            <form
+              onSubmit={form.onSubmit(() => {
+                console.log(form.values.taxType);
+              })}>
+              <Select
+                label="Course taxée par : "
+                placeholder="Sélectionner le type"
+                data={[
+                  { value: "hour", label: "Heure" },
+                  { value: "minute", label: "Minute" },
+                ]}
+                value={form.values.taxType}
+                // defaultValue={settings.items.taxType}
+                onChange={(event: any) =>
+                  // form.setFieldValue("taxType", event.target.value)
+
+                  console.log(event.target.value)
+                }
+              />
+              <Button type="submit">Change</Button>
+            </form>
+            {/* <Switch
               checked={checked}
               onLabel="Heure"
               offLabel="Minute"
@@ -49,11 +81,11 @@ const SettingsPage = () => {
 
                 handleChange();
 
-                await dispatch(updateTaxType("minute"));
+                await dispatch(updateTaxType(value));
                 await dispatch(getSettings());
               }}
               size="xl"
-            />
+            /> */}
           </Flex>
         )}
       </PageLayoutTemplate>
