@@ -26,7 +26,7 @@ const DriversPage = () => {
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "90%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "95%", margin: "1em auto", height: "100%" }}>
             <DriverTable data={drivers.items} />
           </Flex>
         )}

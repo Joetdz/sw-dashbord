@@ -1,5 +1,5 @@
 import { createSlice, } from "@reduxjs/toolkit";
-import { getDrivers } from "./thunk";
+import { getDrivers, activateDriver, deactivateDriver } from "./thunk";
 
 
 
@@ -11,7 +11,9 @@ interface DriverState {
     new: string,
     isLoading: boolean,
     items: string[],
-    singleDriverDetails: string
+    singleDriverDetails: string,
+    isActiving: boolean,
+    isDeactivating: boolean,
 }
 
 const initialState = {
@@ -22,7 +24,9 @@ const initialState = {
     new: "",
     items: [],
     isLoading: false,
-    singleDriverDetails: ""
+    singleDriverDetails: "",
+    isActiving: false,
+    isDeactivating: false
 } as DriverState;
 
 
@@ -32,7 +36,6 @@ export const carSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-
             .addCase(getDrivers.pending, (state: any, action) => {
                 return {
                     ...state,
@@ -54,6 +57,54 @@ export const carSlice = createSlice({
                     ...state,
                     isLoading: false,
                     hasError: true,
+                }
+            })
+
+            .addCase(activateDriver.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isActiving: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(activateDriver.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isActiving: false,
+                    hasError: false
+                }
+            })
+
+            .addCase(activateDriver.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isActiving: false,
+                    hasError: true
+                }
+            })
+            .addCase(deactivateDriver.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isDeactivating: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(deactivateDriver.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isDeactivating: false,
+                    hasError: false
+                }
+            })
+
+
+            .addCase(deactivateDriver.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isDeactivating: false,
+                    hasError: false
                 }
             })
     }

@@ -9,7 +9,14 @@ import {
   Center,
   TextInput,
   rem,
+  Button,
 } from "@mantine/core";
+import { useDispatch } from "react-redux";
+import {
+  activateDriver,
+  getDrivers,
+  deactivateDriver,
+} from "../../store/features/drivers/thunk";
 import { keys } from "@mantine/utils";
 import {
   IconSelector,
@@ -46,18 +53,19 @@ const useStyles = createStyles((theme) => ({
 interface RowData {
   uid: string;
   name: string;
-  password: "string";
-  phone: "string";
-  gender: "M";
+  password: string;
+  phone: string;
+  gender: string;
+  active: boolean;
   car: {
-    model: "string";
-    plaque: "string";
+    model: string;
+    plaque: string;
     isSelfOwner: true;
-    images: ["string"];
+    images: [string];
     owner: {
-      name: "string";
-      email: "string";
-      phone: "string";
+      name: string;
+      email: string;
+      phone: string;
     };
   };
 }
@@ -87,9 +95,9 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
           <Text fw={500} fz="sm">
             {children}
           </Text>
-          <Center className={classes.icon}>
+          {/* <Center className={classes.icon}>
             <Icon size="0.9rem" stroke={1.5} />
-          </Center>
+          </Center> */}
         </Group>
       </UnstyledButton>
     </th>
@@ -146,6 +154,8 @@ export function DriverTable({ data }: TableSortProps) {
     // );
   };
 
+  const dispatch = useDispatch<any>();
+
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
@@ -157,8 +167,36 @@ export function DriverTable({ data }: TableSortProps) {
       <td>
         <Link to={`/drivers/${row.uid}`}>{row.car && row.car.model}</Link>
       </td>
+      <td>
+        {row.active ? (
+          <Text color="green">Compte activé</Text>
+        ) : (
+          <Text color="red">Compte désactivé</Text>
+        )}
+      </td>
+      <td>
+        {row.active ? (
+          <Button
+            onClick={async () => {
+              await dispatch(deactivateDriver(row.uid));
+              await dispatch(getDrivers());
+            }}>
+            Désactiver
+          </Button>
+        ) : (
+          <Button
+            onClick={async () => {
+              await dispatch(activateDriver(row.uid));
+              await dispatch(getDrivers());
+            }}>
+            Activer
+          </Button>
+        )}
+      </td>
     </tr>
   ));
+
+  console.log(data);
 
   return (
     <ScrollArea>
@@ -193,6 +231,18 @@ export function DriverTable({ data }: TableSortProps) {
               reversed={reverseSortDirection}
               onSort={() => setSorting("car")}>
               Véhicule utilisé
+            </Th>
+            <Th
+              sorted={sortBy === "active"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("active")}>
+              Etat du compte
+            </Th>
+            <Th
+              sorted={sortBy === "active"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("active")}>
+              Actions utilisateurs
             </Th>
           </tr>
         </thead>
