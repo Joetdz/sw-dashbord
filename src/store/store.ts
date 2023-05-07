@@ -4,6 +4,7 @@ import carSlice from "./features/cars/slice";
 import driverSlice from "./features/drivers/slice";
 import pepoSlice from "./features/pepo/slice";
 import settingSlice from "./features/settings/slice";
+import tripSlice from "./features/trips/slice";
 
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
         cars: carSlice.reducer,
         drivers: driverSlice.reducer,
         pepo: pepoSlice.reducer,
-        settings: settingSlice.reducer
+        settings: settingSlice.reducer,
+        trips: tripSlice.reducer
     }
 })
