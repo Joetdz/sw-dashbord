@@ -1,17 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPepoCars, getSinglePepoCar, updatePepoCar } from "./thunk";
+import { getPepoCars, getSinglePepoCar, updatePepoCar, addPepoCar } from "./thunk";
 
 
 
 interface PepoCarState {
-
     isCreating: boolean,
-
     hasError: boolean,
     isUpdating: boolean,
     new: string,
     isLoading: boolean,
-
     items: string[],
     singlePepoCarDetails: string
 }
@@ -103,6 +100,30 @@ export const pepoSlice = createSlice({
                 return {
                     ...state,
                     isUpdating: false,
+                    hasError: true,
+                }
+            })
+
+            .addCase(addPepoCar.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isCreating: true,
+                    hasError: false,
+                }
+            })
+
+            .addCase(addPepoCar.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isCreating: false,
+                    hasError: false,
+                }
+            })
+
+            .addCase(addPepoCar.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isCreating: false,
                     hasError: true,
                 }
             })

@@ -42,7 +42,22 @@ const CarsPage = () => {
             }}>
             <Flex>
               <Group position="center">
-                <Button onClick={open}>Ajouter une voiture</Button>
+                <Button
+                  onClick={open}
+                  sx={[
+                    {
+                      background: "#0C3966",
+                      borderRadius: "25px",
+                      marginBottom: "20px",
+                    },
+                    {
+                      "&:hover": {
+                        background: "#01101E",
+                      },
+                    },
+                  ]}>
+                  Ajouter une voiture
+                </Button>
               </Group>
             </Flex>
 

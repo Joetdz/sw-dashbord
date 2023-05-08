@@ -16,3 +16,7 @@ code {
 .page__layout--template {
   padding: 1em;
 }
+
+a {
+  text-decoration: none !important;
+}

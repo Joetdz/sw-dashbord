@@ -30,3 +30,13 @@ export const updatePepoCar = createAsyncThunk("pepo/updatePepoCar", async (param
         data: params.content
     }).then((response) => response.data)
 })
+export const addPepoCar = createAsyncThunk("pepo/addPepoCar", async (content: { model: string, price: number, currency: string }) => {
+    return axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_API_URL}pepo-cars/`,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: content
+    }).then((response) => response.data)
+})

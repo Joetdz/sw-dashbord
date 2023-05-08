@@ -98,9 +98,11 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
-    return data.filter((item) =>
-      keys(data[0]).some((key) => (`${item[key]}` as string).toLowerCase().includes(query)),
-    );
+  return data.filter((item) =>
+    keys(data[0]).some((key) =>
+      (`${item[key]}` as string).toLowerCase().includes(query),
+    ),
+  );
 }
 
 function sortData(
@@ -113,16 +115,18 @@ function sortData(
     return filterData(data, payload.search);
   }
 
-    return filterData(
-      [...data].sort((a, b) => {
-        if (payload.reversed) {
-          return (`${b[sortBy]}` as string).localeCompare((`${a[sortBy]}` as string));
-        }
+  return filterData(
+    [...data].sort((a, b) => {
+      if (payload.reversed) {
+        return (`${b[sortBy]}` as string).localeCompare(
+          `${a[sortBy]}` as string,
+        );
+      }
 
-        return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
-      }),
-      payload.search,
-    );
+      return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
+    }),
+    payload.search,
+  );
 }
 
 export function TableSort({ data }: TableSortProps) {
@@ -152,9 +156,7 @@ export function TableSort({ data }: TableSortProps) {
         <Link to={`/cars/${row.uid}`}>{row.model}</Link>
       </td>
       <td>
-        <Link to={`/cars/${row.uid}`}>
-          {row.prices.km.price} {row.prices.km.currency}
-        </Link>
+        {row.prices.km.price} {row.prices.km.currency}
       </td>
     </tr>
   ));
@@ -190,7 +192,6 @@ export function TableSort({ data }: TableSortProps) {
           </tr>
         </thead>
         <tbody>
-          
           {rows.length > 0 ? (
             rows
           ) : (

@@ -184,6 +184,11 @@ export function DriverTable({ data }: TableSortProps) {
             onClick={async () => {
               await dispatch(deactivateDriver(row.uid));
               await dispatch(getDrivers());
+            }}
+            sx={{
+              background: "#F31D1D",
+              borderRadius: "25px",
+              fontSize: ".8em",
             }}>
             Désactiver
           </Button>
@@ -192,6 +197,11 @@ export function DriverTable({ data }: TableSortProps) {
             onClick={async () => {
               await dispatch(activateDriver(row.uid));
               await dispatch(getDrivers());
+            }}
+            sx={{
+              background: "#F55D2C",
+              borderRadius: "25px",
+              fontSize: ".8em",
             }}>
             Activer
           </Button>
