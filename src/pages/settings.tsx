@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { getSettings, updateTaxType } from "../store/features/settings/thunk";
+import { toast, ToastContainer } from "react-toastify";
 
 const SettingsPage = () => {
   const [checked, setChecked] = useState(true);
@@ -25,6 +26,7 @@ const SettingsPage = () => {
   const settings = useSelector((state: any) => state.settings);
 
   const [value, setValue] = useState<string>("");
+  const [edit, setEdit] = useState<boolean>(false);
 
   const handleChange = () => {
     return !checked ? setValue("minute") : setValue("hour");
@@ -51,27 +53,49 @@ const SettingsPage = () => {
           <Flex
             direction="column"
             sx={{ width: "70%", margin: "1em auto", height: "100%" }}>
-            <form
-              onSubmit={form.onSubmit(() => {
-                console.log(form.values.taxType);
-              })}>
-              <NativeSelect
-                label="Course taxée par : "
-                placeholder="Sélectionner le type"
-                data={[
-                  { value: "hour", label: "Heure" },
-                  { value: "minute", label: "Minute" },
-                ]}
-                // value={form.values.taxType}
-                // defaultValue={settings.items.taxType}
-                onChange={(event) =>
-                  form.setFieldValue("taxType", event.currentTarget.value)
+            {!edit ? (
+              <>
+                <Text>
+                  Course taxée par :{" "}
+                  {settings.items.taxType === "hour" ? "Heure" : "Minute"}
+                </Text>
+                <Button onClick={() => setEdit(true)}>Modifier</Button>
+              </>
+            ) : (
+              <form
+                onSubmit={form.onSubmit(async () => {
+                  await toast.promise(
+                    dispatch(updateTaxType(form.values.taxType)),
+                    {
+                      pending: "Modification de la tarification en cours",
+                      success:
+                        "Modification de la tarification réussie avec succès",
+                      error:
+                        "Une erreur s'est produite lors de la modification",
+                    },
+                  );
 
-                  // console.log(event.currentTarget.value)
-                }
-              />
-              <Button type="submit">Change</Button>
-            </form>
+                  window.location.reload();
+                })}>
+                <NativeSelect
+                  label="Modifier la tarification : "
+                  placeholder="Sélectionner le type"
+                  data={[
+                    { value: "hour", label: "Heure" },
+                    { value: "minute", label: "Minute" },
+                  ]}
+                  // value={form.values.taxType}
+                  // defaultValue={settings.items.taxType}
+                  onChange={
+                    (event) =>
+                      form.setFieldValue("taxType", event.currentTarget.value)
+
+                    // console.log(event.currentTarget.value)
+                  }
+                />
+                <Button type="submit">Enregistrer</Button>
+              </form>
+            )}
             {/* <Switch
               checked={checked}
               onLabel="Heure"
@@ -86,6 +110,7 @@ const SettingsPage = () => {
               }}
               size="xl"
             /> */}
+            <ToastContainer />
           </Flex>
         )}
       </PageLayoutTemplate>
