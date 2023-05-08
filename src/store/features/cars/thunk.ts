@@ -54,3 +54,15 @@ export const getSingleCar = createAsyncThunk("cars/getSingleCar", async (id: str
         }
     }).then((response) => response.data)
 })
+
+
+export const updateCar = createAsyncThunk("cars/updateCar", async (params: { id: string | undefined, content: any }) => {
+    return axios({
+        method: "PATCH",
+        url: `${process.env.REACT_APP_API_URL}cars/${params.id}`,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: params.content
+    }).then((response) => response.data)
+})

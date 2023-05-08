@@ -27,7 +27,6 @@ export const CurrencyInput = ({
   taxType,
   price,
   currency,
-  //   onChange,
   changePrice,
   changeCurrency,
 }: Props) => {
@@ -52,7 +51,7 @@ export const CurrencyInput = ({
   return (
     <TextInput
       type="number"
-      placeholder="1000"
+      placeholder={`${price}`}
       label={`Prix/${taxType}`}
       value={price}
       rightSection={select}

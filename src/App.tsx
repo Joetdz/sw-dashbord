@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -24,23 +24,37 @@ function App() {
 
   const networkStatus = useNetwork();
 
+  const [close, setClose] = useState<boolean>(false);
+
+  const closeNotification = () => {
+    setClose(!close);
+  };
+
   return (
     <>
-      {networkStatus.online ? (
+      {/* {networkStatus.online ? (
         <Notification
           icon={<IconCheck size="1.1rem" />}
           color="teal"
           title="Status"
           sx={{ position: "absolute", top: "2%", right: "2%", zIndex: 9999 }}
           withCloseButton={true}
-          closeButtonProps={{ "aria-label": "Hide notification" }}>
+          closeButtonProps={{ "aria-label": "Hide notification" }}
+          onClick={closeNotification}>
           Vous êtes connectés
         </Notification>
       ) : (
-        <Notification icon={<IconAlertCircle size="1.1rem" />} color="red">
+        <Notification
+          icon={<IconAlertCircle size="1.1rem" />}
+          color="red"
+          title="Status"
+          sx={{ position: "absolute", top: "2%", right: "2%", zIndex: 9999 }}
+          withCloseButton={true}
+          closeButtonProps={{ "aria-label": "Hide notification" }}
+          onClick={closeNotification}>
           Vous êtes hors ligne
         </Notification>
-      )}
+      )} */}
       <Routes>
         <Route index path="/" element={token ? <HomePage /> : <LoginPage />} />
         <Route path="/cars" element={<CarsPage />} />

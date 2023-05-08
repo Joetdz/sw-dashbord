@@ -55,19 +55,19 @@ const SettingsPage = () => {
               onSubmit={form.onSubmit(() => {
                 console.log(form.values.taxType);
               })}>
-              <Select
+              <NativeSelect
                 label="Course taxée par : "
                 placeholder="Sélectionner le type"
                 data={[
                   { value: "hour", label: "Heure" },
                   { value: "minute", label: "Minute" },
                 ]}
-                value={form.values.taxType}
+                // value={form.values.taxType}
                 // defaultValue={settings.items.taxType}
-                onChange={(event: any) =>
-                  // form.setFieldValue("taxType", event.target.value)
+                onChange={(event) =>
+                  form.setFieldValue("taxType", event.currentTarget.value)
 
-                  console.log(event.target.value)
+                  // console.log(event.currentTarget.value)
                 }
               />
               <Button type="submit">Change</Button>

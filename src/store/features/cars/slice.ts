@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCars, addNewCar, getSingleCar } from "./thunk";
+import { getCars, addNewCar, getSingleCar, updateCar } from "./thunk";
 
 
 
@@ -114,6 +114,31 @@ export const carSlice = createSlice({
                     hasError: true,
                 }
             })
+
+            .addCase(updateCar.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: true,
+                    hasError: false,
+                }
+            })
+
+            .addCase(updateCar.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: false,
+                }
+            })
+            .addCase(updateCar.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: true,
+                }
+            })
+
+
     }
 
 })

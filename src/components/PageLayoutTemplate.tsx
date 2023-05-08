@@ -8,7 +8,7 @@ const PageLayoutTemplate = ({ children }: Props) => {
   return (
     <Container
       fluid={true}
-      style={{ width: "100%", position: "relative", left: "10%" }}
+      style={{ width: "70%", position: "relative", left: "10%" }}
       size="xl"
       className="page__layout--template">
       {children}

@@ -49,20 +49,15 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     textDecoration: "none",
     fontSize: theme.fontSizes.sm,
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[1]
-        : theme.colors.gray[7],
+    color: theme.colorScheme === "dark" ? theme.colors.dark[1] : "#FFFFFF",
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
     borderRadius: theme.radius.sm,
     fontWeight: 500,
 
     "&:hover": {
       backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
-      color: theme.colorScheme === "dark" ? "#F9A507" : theme.black,
+        theme.colorScheme === "dark" ? theme.colors.dark[6] : "#F9A507",
+      color: theme.colorScheme === "dark" ? "#F9A507" : theme.white,
 
       [`& .${getStylesRef("icon")}`]: {
         color: theme.colorScheme === "dark" ? theme.white : theme.black,
@@ -72,24 +67,27 @@ const useStyles = createStyles((theme) => ({
 
   linkIcon: {
     ref: getStylesRef("icon"),
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[2]
-        : theme.colors.gray[6],
+    color: theme.colorScheme === "dark" ? theme.colors.dark[2] : "#FFFFFF",
     marginRight: theme.spacing.sm,
+    "&:hover": {
+      color: "#FFFFFF",
+    },
   },
 
   linkActive: {
     "&, &:hover": {
-      backgroundColor: theme.fn.variant({
-        variant: "light",
-        color: theme.primaryColor,
-      }).background,
-      color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-        .color,
+      // backgroundColor: theme.fn.variant({
+      //   variant: "light",
+      //   color: "#F9A507",
+      // }).background,
+      backgroundColor: "#F9A507",
+      // color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
+      //   .color,
+      color: "#FFFFFF",
       [`& .${getStylesRef("icon")}`]: {
-        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-          .color,
+        // color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
+        //   .color,
+        color: "#FFFFFF",
       },
     },
   },
@@ -124,9 +122,7 @@ export function NavbarSimple() {
         event.preventDefault();
         setActive(item.label);
         navigate(`${item.link}`, { replace: false });
-      }}
-      
-    >
+      }}>
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
     </Link>
