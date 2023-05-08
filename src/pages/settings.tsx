@@ -52,14 +52,16 @@ const SettingsPage = () => {
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "70%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
             {!edit ? (
               <>
                 <Text>
                   Course taxée par :{" "}
                   {settings.items.taxType === "hour" ? "Heure" : "Minute"}
                 </Text>
-                <Button onClick={() => setEdit(true)}>Modifier</Button>
+                  <Button onClick={() => setEdit(true)}
+                  sx={{width: "20%"}}
+                  >Modifier</Button>
               </>
             ) : (
               <form

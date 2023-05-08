@@ -18,6 +18,7 @@ import ServicesPage from "./pages/services";
 import SettingsPage from "./pages/settings";
 import SingleCarPage from "./pages/singleCar";
 import PepoCarDetails from "./pages/singlePepoCar";
+import NotFoundPage from "./pages/notFound";
 import "./App.css";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
     setClose(!close);
   };
 
+  const logged = useSelector((state: any) => state.admin.logged);
   return (
     <>
       {/* {networkStatus.online ? (
@@ -57,15 +59,31 @@ function App() {
         </Notification>
       )} */}
       <Routes>
-        <Route index path="/" element={token ? <HomePage /> : <LoginPage />} />
-        <Route path="/cars" element={<CarsPage />} />
-        <Route path="/cars/:id" element={<SingleCarPage />} />
-        <Route path="/trips" element={<TripsPage />} />
-        <Route path="/passengers" element={<PassengersPage />} />
-        <Route path="/drivers" element={<DriversPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/pepo/cars/:id" element={<PepoCarDetails />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        {!token ? (
+          <>
+            <Route index path="/" element={<LoginPage />} />
+
+            <Route
+              path="/*"
+              element={
+                token && logged ? <NotFoundPage /> : <Navigate replace to="/" />
+              }
+            />
+          </>
+        ) : (
+          <>
+            <Route index path="/" element={<HomePage />} />
+            <Route path="/cars" element={<CarsPage />} />
+            <Route path="/cars/:id" element={<SingleCarPage />} />
+            <Route path="/trips" element={<TripsPage />} />
+            <Route path="/passengers" element={<PassengersPage />} />
+            <Route path="/drivers" element={<DriversPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/pepo/cars/:id" element={<PepoCarDetails />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/*" element={<NotFoundPage />} />
+          </>
+        )}
       </Routes>
     </>
   );

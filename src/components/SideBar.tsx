@@ -95,7 +95,7 @@ const useStyles = createStyles((theme) => ({
 
 const data = [
   { link: "/", label: "Accueil", icon: IconHome2 },
-  { link: "", label: "Notifications", icon: IconBellRinging },
+  // { link: "", label: "Notifications", icon: IconBellRinging },
   { link: "/trips", label: "Courses", icon: IconBrandTripadvisor },
   { link: "/passengers", label: "Passagers", icon: IconUsers },
   { link: "/drivers", label: "Chauffeurs", icon: IconIdBadge2 },
@@ -151,7 +151,10 @@ export function NavbarSimple() {
         <a
           href="#"
           className={classes.link}
-          onClick={(event) => event.preventDefault()}>
+          onClick={(event) => {
+            localStorage.clear();
+            window.location.reload();
+          }}>
           <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
           <span>Changer de compte</span>
         </a>
@@ -159,7 +162,10 @@ export function NavbarSimple() {
         <a
           href="#"
           className={classes.link}
-          onClick={(event) => event.preventDefault()}>
+          onClick={(event) => {
+            localStorage.clear();
+            window.location.reload();
+          }}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Déconnexion</span>
         </a>
