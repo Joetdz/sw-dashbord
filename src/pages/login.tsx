@@ -11,12 +11,12 @@ import {
   PaperProps,
   Button,
   Stack,
-  Image
+  Image,
 } from "@mantine/core";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/features/admins/thunk";
-import { setError } from "../store/features/admins/slice";
+import { setError, setAuth } from "../store/features/admins/slice";
 
 const LoginPage = (props: PaperProps) => {
   const [type, toggle] = useToggle(["Se connecter", "register"]);
@@ -71,7 +71,7 @@ const LoginPage = (props: PaperProps) => {
         radius="md"
         src="/logo-gari.png"
         alt="Random image"
-        sx={{margin: "1em 0"}}
+        sx={{ margin: "1em 0" }}
       />
       <Paper radius="md" p="xl" withBorder {...props}>
         <Text size="lg" weight={500}>
@@ -95,11 +95,20 @@ const LoginPage = (props: PaperProps) => {
             );
             navigate("/", { replace: true });
 
+            // setTimeout(() => {
+            //   dispatch(setError(true));
+            // }, 6000);
             setTimeout(() => {
-              dispatch(setError(true));
-            }, 6000);
+              dispatch(setAuth(true));
+              window.location.reload();
+            }, 5000);
+            toast.success(
+              "Connexion réussie ! Vous serez redirigés dans quelques sécondes",
+              {
+                position: toast.POSITION.TOP_RIGHT,
+              },
+            );
 
-            // window.location.reload();
           })}>
           <Stack>
             <TextInput
