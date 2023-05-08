@@ -19,6 +19,7 @@ import SettingsPage from "./pages/settings";
 import SingleCarPage from "./pages/singleCar";
 import PepoCarDetails from "./pages/singlePepoCar";
 import NotFoundPage from "./pages/notFound";
+import { setAuth } from "./store/features/admins/slice";
 import "./App.css";
 
 function App() {
@@ -33,6 +34,15 @@ function App() {
   };
 
   const logged = useSelector((state: any) => state.admin.logged);
+
+  const auth = localStorage.getItem("auth");
+
+  const dispatch = useDispatch();
+
+  if (token) {
+    dispatch(setAuth(true));
+  }
+
   return (
     <>
       {/* {networkStatus.online ? (
@@ -59,7 +69,7 @@ function App() {
         </Notification>
       )} */}
       <Routes>
-        {!token ? (
+        {!token && !logged ? (
           <>
             <Route index path="/" element={<LoginPage />} />
 
