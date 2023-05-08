@@ -99,7 +99,7 @@ const LoginPage = (props: PaperProps) => {
               dispatch(setError(true));
             }, 6000);
 
-            window.location.reload();
+            // window.location.reload();
           })}>
           <Stack>
             <TextInput
