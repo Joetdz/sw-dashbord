@@ -5,6 +5,7 @@ import driverSlice from "./features/drivers/slice";
 import pepoSlice from "./features/pepo/slice";
 import settingSlice from "./features/settings/slice";
 import tripSlice from "./features/trips/slice";
+import passengerSlice from "./features/passengers/slice";
 
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
         drivers: driverSlice.reducer,
         pepo: pepoSlice.reducer,
         settings: settingSlice.reducer,
-        trips: tripSlice.reducer
+        trips: tripSlice.reducer,
+        passengers: passengerSlice.reducer
     }
 })

@@ -56,18 +56,9 @@ interface RowData {
   password: string;
   phone: string;
   gender: string;
-  active: boolean;
-  car: {
-    model: string;
-    plaque: string;
-    isSelfOwner: true;
-    images: [string];
-    owner: {
-      name: string;
-      email: string;
-      phone: string;
-    };
-  };
+
+  email: string;
+  action: any;
 }
 
 interface TableSortProps {
@@ -136,7 +127,7 @@ function sortData(
   );
 }
 
-export function DriverTable({ data }: TableSortProps) {
+export function PassengersTable({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
@@ -168,44 +159,20 @@ export function DriverTable({ data }: TableSortProps) {
       <td>
         <Link to={`/drivers/${row.uid}`}>{row.phone}</Link>
       </td>
+      <td>{!row.email ? "---" : row.email}</td>
       <td>
-        <Link to={`/drivers/${row.uid}`}>{row.car && row.car.model}</Link>
-      </td>
-      <td>
-        {row.active ? (
-          <Text color="green">Compte activé</Text>
-        ) : (
-          <Text color="red">Compte désactivé</Text>
-        )}
-      </td>
-      <td>
-        {row.active ? (
-          <Button
-            onClick={async () => {
-              await dispatch(deactivateDriver(row.uid));
-              await dispatch(getDrivers());
-            }}
-            sx={{
-              background: "#F31D1D",
-              borderRadius: "25px",
-              fontSize: ".8em",
-            }}>
-            Désactiver
-          </Button>
-        ) : (
-          <Button
-            onClick={async () => {
-              await dispatch(activateDriver(row.uid));
-              await dispatch(getDrivers());
-            }}
-            sx={{
-              background: "#0C3966",
-              borderRadius: "25px",
-              fontSize: ".8em",
-            }}>
-            Activer
-          </Button>
-        )}
+        <Button
+          onClick={async () => {
+            await dispatch(deactivateDriver(row.uid));
+            await dispatch(getDrivers());
+          }}
+          sx={{
+            background: "#F31D1D",
+            borderRadius: "25px",
+            fontSize: ".8em",
+          }}>
+          Voir les courses
+        </Button>
       </td>
     </tr>
   ));
@@ -239,21 +206,22 @@ export function DriverTable({ data }: TableSortProps) {
               Numéro de téléphone
             </Th>
             <Th
-              sorted={sortBy === "car"}
+              sorted={sortBy === "email"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("car")}>
-              Véhicule utilisé
+              onSort={() => setSorting("email")}>
+              Email
             </Th>
-            <Th
-              sorted={sortBy === "active"}
+            {/* <Th
+              sorted={sortBy === "address"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("active")}>
-              Etat du compte
-            </Th>
+              onSort={() => setSorting("address")}>
+              Adresse
+            </Th> */}
+
             <Th
-              sorted={sortBy === "active"}
+              sorted={sortBy === "action"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("active")}>
+              onSort={() => setSorting("action")}>
               Actions utilisateurs
             </Th>
           </tr>

@@ -30,7 +30,7 @@ const initialState = {
 } as DriverState;
 
 
-export const carSlice = createSlice({
+export const driverSlice = createSlice({
     name: "drivers",
     initialState,
     reducers: {},
@@ -110,4 +110,4 @@ export const carSlice = createSlice({
     }
 
 })
-export default carSlice
+export default driverSlice
