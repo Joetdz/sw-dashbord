@@ -86,10 +86,12 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
-  return data.filter((item) => item  &&
-    keys(data[0]).some((key) =>
-      (`${item[key]}` as string).toLowerCase().includes(query),
-    ),
+  return data.filter(
+    (item) =>
+      item &&
+      keys(data[0]).some((key) =>
+        (`${item[key]}` as string).toLowerCase().includes(query),
+      ),
   );
 }
 
@@ -141,12 +143,10 @@ export function PepoCarTable({ data }: TableSortProps) {
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
-        <Link to={`/cars/${row.uid}`}>{row.model}</Link>
+        <Link to={`/pepo/cars/${row.uid}`}>{row.model}</Link>
       </td>
       <td>
-        <Link to={`/cars/${row.uid}`}>
-          {row.price} {row.currency}
-        </Link>
+        {row.price} {row.currency}
       </td>
     </tr>
   ));

@@ -17,6 +17,7 @@ import DriversPage from "./pages/drivers";
 import ServicesPage from "./pages/services";
 import SettingsPage from "./pages/settings";
 import SingleCarPage from "./pages/singleCar";
+import PepoCarDetails from "./pages/singlePepoCar";
 import "./App.css";
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
         <Route path="/passengers" element={<PassengersPage />} />
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/services" element={<ServicesPage />} />
+        <Route path="/pepo/cars/:id" element={<PepoCarDetails />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </>

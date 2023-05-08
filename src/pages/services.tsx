@@ -29,7 +29,7 @@ const ServicesPage = () => {
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "70%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
             {pepoCars.items.length <= 0 ? (
               <Text>
                 Une erreur s'est produite lors de la reque veuillez réessayer

@@ -11,3 +11,22 @@ export const getPepoCars = createAsyncThunk("pepo/getPepoCars", async () => {
         }
     }).then((response) => response.data)
 })
+export const getSinglePepoCar = createAsyncThunk("pepo/getSinglePepoCar", async (id: string | undefined) => {
+    return axios({
+        method: "GET",
+        url: `${process.env.REACT_APP_API_URL}pepo-cars/${id}`,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then((response) => response.data)
+})
+export const updatePepoCar = createAsyncThunk("pepo/updatePepoCar", async (params: { id: string | undefined, content: any }) => {
+    return axios({
+        method: "PATCH",
+        url: `${process.env.REACT_APP_API_URL}pepo-cars/${params.id}`,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: params.content
+    }).then((response) => response.data)
+})

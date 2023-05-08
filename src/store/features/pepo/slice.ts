@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPepoCars } from "./thunk";
+import { getPepoCars, getSinglePepoCar, updatePepoCar } from "./thunk";
 
 
 
@@ -13,7 +13,7 @@ interface PepoCarState {
     isLoading: boolean,
 
     items: string[],
-    singleCarDetails: string
+    singlePepoCarDetails: string
 }
 
 
@@ -25,7 +25,7 @@ const initialState = {
     new: "",
     items: [],
     isLoading: false,
-    singleCarDetails: ""
+    singlePepoCarDetails: ""
 } as PepoCarState;
 
 export const pepoSlice = createSlice({
@@ -60,7 +60,52 @@ export const pepoSlice = createSlice({
                 }
             })
 
+            .addCase(getSinglePepoCar.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                }
+            })
 
+            .addCase(getSinglePepoCar.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                    singlePepoCarDetails: action.payload
+                }
+            })
+
+            .addCase(getSinglePepoCar.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: true,
+                }
+            })
+
+            .addCase(updatePepoCar.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: true,
+                    hasError: false,
+                }
+            })
+            .addCase(updatePepoCar.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: false,
+                }
+            })
+            .addCase(updatePepoCar.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: true,
+                }
+            })
     }
 
 })
