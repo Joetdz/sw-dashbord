@@ -183,23 +183,30 @@ export function TripsTable({ data }: TableSortProps) {
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
-        <Link to={`/trips/${row.uid}`}>{row.locations.from.name}</Link>
+        {row.locations.from.name}
+        {/* <Link to={`/trips/${row.uid}`}>
+          
+        </Link> */}
       </td>
       <td>
-        <Link to={`/trips/${row.uid}`}>{row.locations.to.name}</Link>
+        {row.locations.to.name}
+        {/* <Link to={`/trips/${row.uid}`}>
+        
+        </Link> */}
       </td>
       <td>
-        <Link to={`/passengers/${row.uid}`}>
-          {row.passenger && row.passenger.name}
-        </Link>
+        {/* <Link to={`/passengers/${row.uid}`}>
+        </Link> */}
+        {row.passenger && row.passenger.name}
       </td>
       <td>
-        <Link to={`/drivers/${row.uid}`}>{row.driver && row.driver.name}</Link>
+        {/* <Link to={`/drivers/${row.uid}`}></Link> */}
+        {row.driver && row.driver.name}
       </td>
       <td>
-        <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
-          {row.car && row.car.model}
-        </Link>
+        {row.car && row.car.model}
+        {/* <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
+        </Link> */}
       </td>
       <td>
         <Button
@@ -212,7 +219,7 @@ export function TripsTable({ data }: TableSortProps) {
             borderRadius: "25px",
             fontSize: ".8em",
           }}>
-          Voir les courses
+          Voir les détails
         </Button>
       </td>
     </tr>
@@ -220,13 +227,13 @@ export function TripsTable({ data }: TableSortProps) {
 
   return (
     <ScrollArea>
-      <TextInput
+      {/* <TextInput
         placeholder="Rechercher ici"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
-      />
+      /> */}
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
