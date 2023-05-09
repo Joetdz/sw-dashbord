@@ -44,7 +44,7 @@ export const getUsers = createAsyncThunk("admin/getUsers", async () => {
 
 
 
-export const createAccount = createAsyncThunk("admin/createAccount", async (content: { firstName: string, lastName:string, email: string, password: string, key: string }) => {
+export const createAccount = createAsyncThunk("admin/createAccount", async (content: { firstName: string, lastName: string, email: string, password: string, key: string }) => {
     return axios({
         method: "POST",
         data: {
@@ -60,22 +60,38 @@ export const createAccount = createAsyncThunk("admin/createAccount", async (cont
         }
     })
         .then((response) => response.data)
+
 })
 
-// export const updateUser = createAsyncThunk("user/updateUser", async (content: { id: string, company: string, rule: string }) => {
-//     return axios({
-//         method: "PATCH",
-//         data: {
-//             company: content.company,
-//             rule: content.rule,
-//         },
-//         url: `${process.env.REACT_APP_API_URL}/user/update/${content.id}`,
-//         headers: {
-//             "Content-Type": "application/json",
-//         }
-//     })
-//         .then((response) => response.data.article)
-// })
+
+export const getOneUser = createAsyncThunk("admin/getOneUser", async (id: string | undefined) => {
+    return axios({
+        method: "GET",
+
+        url: `${process.env.REACT_APP_API_URL}admins/${id}`,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+        .then((response) =>
+            response.data
+        )
+        .catch((error) => error.status)
+})
+
+
+
+export const updateUser = createAsyncThunk("user/updateUser", async (params: { id: string | undefined, content: any }) => {
+    return axios({
+        method: "PATCH",
+        data: params.content,
+        url: `${process.env.REACT_APP_API_URL}admins/${params.id}`,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+        .then((response) => response.data)
+})
 
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, isNotEmpty, hasLength } from "@mantine/form";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Loader,
   Flex,
@@ -24,6 +24,7 @@ const SingleCarPage = () => {
   const { id } = useParams<{ id?: string }>();
 
   const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getSingleCar(id));
   }, [dispatch]);
@@ -155,9 +156,21 @@ const SingleCarPage = () => {
                 </Flex>
 
                 <Flex direction="row">
-                  <Button onClick={() => setEdit(true)}>Supprimer</Button>
+                  <Button
+                    onClick={() => setEdit(true)}
+                    style={{
+                      background: "#F31D1D",
+                      borderRadius: "25px",
+                      marginRight: "2em",
+                    }}>
+                    Supprimer
+                  </Button>
 
-                  <Button onClick={() => setEdit(true)}>Modifier</Button>
+                  <Button
+                    onClick={() => setEdit(true)}
+                    style={{ background: "#0C3966", borderRadius: "25px" }}>
+                    Modifier
+                  </Button>
                 </Flex>
               </Stack>
             ) : (
@@ -183,10 +196,7 @@ const SingleCarPage = () => {
                                   form.values.prices.km.price === 0
                                     ? cars.singleCarDetails.prices.km.price
                                     : form.values.prices.km.price,
-                                // currency:
-                                //   form.values.prices.km.currency.length === 0
-                                //     ? cars.singleCarDetails.prices.km.currecny
-                                //     : form.values.prices.km.currency,
+
                                 currency: form.values.prices.km.currency,
                               },
                               hour: {
@@ -194,10 +204,7 @@ const SingleCarPage = () => {
                                   form.values.prices.hour.price === 0
                                     ? cars.singleCarDetails.prices.hour.price
                                     : form.values.prices.hour.price,
-                                // currency:
-                                //   form.values.prices.hour.currency.length === 0
-                                //     ? cars.singleCarDetails.prices.hour.currecny
-                                //     : form.values.prices.hour.currency,
+
                                 currency: form.values.prices.hour.currency,
                               },
                               minute: {
@@ -205,12 +212,7 @@ const SingleCarPage = () => {
                                   form.values.prices.minute.price === 0
                                     ? cars.singleCarDetails.prices.minute.price
                                     : form.values.prices.minute.price,
-                                // currency:
-                                //   form.values.prices.minute.currency.length ===
-                                //   0
-                                //     ? cars.singleCarDetails.prices.minute
-                                //         .currecny
-                                //     : form.values.prices.minute.currency,
+
                                 currency: form.values.prices.minute.currency,
                               },
                             },
@@ -224,7 +226,7 @@ const SingleCarPage = () => {
                           "Une erreur s'est produite lors de la modification",
                       },
                     );
-
+                    navigate("/cars", { replace: true });
                     window.location.reload();
                   })}>
                   <Stack>
@@ -243,7 +245,7 @@ const SingleCarPage = () => {
                   <Flex direction="column">
                     <Flex
                       direction="row"
-                      sx={{ width: "50%" }}
+                      sx={{ width: "50%", margin: "2em 0 .5em" }}
                       justify="space-between">
                       <Stack>
                         <Title order={5}>Prix / km</Title>
@@ -285,7 +287,9 @@ const SingleCarPage = () => {
                         />
                       </Stack>
                     </Flex>
-                    <Flex sx={{ width: "50%" }} justify="space-between">
+                    <Flex
+                      sx={{ width: "50%", margin: "1em 0 .5em" }}
+                      justify="space-between">
                       <Stack>
                         <Title order={5}>Prix / heure</Title>
 
@@ -303,7 +307,6 @@ const SingleCarPage = () => {
                                 )
                               : ""
                           }
-                          // value={form.values.prices.hour.price}
                           required
                           withAsterisk
                         />
@@ -320,19 +323,19 @@ const SingleCarPage = () => {
                             )
                           }
                           defaultValue="CDF"
-                          // value={form.values.prices.hour.currency}
                           required
                           withAsterisk
                         />
                       </Stack>
                     </Flex>
-                    <Flex sx={{ width: "50%" }} justify="space-between">
+                    <Flex
+                      sx={{ width: "50%", margin: "1em 0 .5em" }}
+                      justify="space-between">
                       <Stack>
                         <Title order={5}>Prix / minute</Title>
 
                         <NumberInput
                           placeholder={`${cars.singleCarDetails.prices.minute.price}`}
-                          // value={form.values.prices.minute.price}
                           onChange={(event) => {
                             form.setFieldValue("prices.minute.price", event);
                           }}
@@ -362,7 +365,6 @@ const SingleCarPage = () => {
                             )
                           }
                           defaultValue="CDF"
-                          // value={form.values.prices.minute.currency}
                           required
                           withAsterisk
                         />
@@ -370,9 +372,35 @@ const SingleCarPage = () => {
                     </Flex>
                   </Flex>
 
-                  <Flex direction="row">
-                    <Button onClick={() => setEdit(false)}>Annuler</Button>
-                    <Button type="submit">Enregistrer</Button>
+                  <Flex direction="row" sx={{ margin: "2em 0" }}>
+                    <Button
+                      onClick={() => setEdit(false)}
+                      sx={[
+                        {
+                          background: "#F31D1D",
+                          borderRadius: "25px",
+                          marginRight: "2em",
+                        },
+                        {
+                          "&:hover": {
+                            background: "#F9A507",
+                          },
+                        },
+                      ]}>
+                      Annuler
+                    </Button>
+                    <Button
+                      type="submit"
+                      sx={[
+                        { background: "#0C3966", borderRadius: "25px" },
+                        {
+                          "&:hover": {
+                            background: "#F9A507",
+                          },
+                        },
+                      ]}>
+                      Enregistrer
+                    </Button>
                   </Flex>
                 </form>
                 <ToastContainer />
