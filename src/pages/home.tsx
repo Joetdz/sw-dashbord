@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavbarSimple } from "../components/SideBar";
-import { Text, Stack, Flex } from "@mantine/core";
+import { Text, Stack, Flex, Loader } from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import StatusCard from "../components/StatusCard";
+import { PassengersTable } from "../components/Tables/PassengersTable";
+import { TripsTable } from "../components/Tables/TripsTable";
+import { DriverTable } from "../components/Tables/DriverTable";
+import { getTrips } from "../store/features/trips/thunk";
+import { getDrivers } from "../store/features/drivers/thunk";
+import { getPassengers } from "../store/features/passengers/thunk";
 
 const HomePage = () => {
   const loggedUser: any = localStorage.getItem("loggedUser");
@@ -32,6 +39,18 @@ const HomePage = () => {
     },
   ];
 
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    dispatch(getTrips());
+    dispatch(getPassengers());
+    dispatch(getDrivers());
+  }, [dispatch]);
+
+  const trips = useSelector((state: any) => state.trips);
+
+  const passengers = useSelector((state: any) => state.passengers);
+  const drivers = useSelector((state: any) => state.drivers);
   return (
     <div style={{ display: "flex" }}>
       <NavbarSimple />
@@ -43,7 +62,34 @@ const HomePage = () => {
         <Text fw={500} size="md">
           Voici ce qui se passe sur vos applications
         </Text>
-        <Flex
+
+        {drivers.isLoading || passengers.isLoading || trips.isLoading ? (
+          <Flex
+            align="center"
+            justify="center"
+            sx={{ height: "100%", width: "100%" }}>
+            <Loader />
+          </Flex>
+        ) : (
+          <Flex
+            direction="column"
+            sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
+            {drivers.items.length <= 0 ? (
+              <Text>Une erreur s'est produite lors de la requête</Text>
+            ) : (
+              <>
+                
+                  <Text>Les courses</Text>
+                  <TripsTable data={trips.items} />
+                
+
+                {/* <DriverTable data={drivers.items} />
+                <PassengersTable data={passengers.items} /> */}
+              </>
+            )}
+          </Flex>
+        )}
+        {/* <Flex
           mih={100}
           gap="md"
           justify="flex-start"
@@ -54,7 +100,7 @@ const HomePage = () => {
           {status.map((stat: any) => (
             <StatusCard text={stat.text} count={stat.result} />
           ))}
-        </Flex>
+        </Flex> */}
       </PageLayoutTemplate>
     </div>
   );
