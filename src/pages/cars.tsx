@@ -35,7 +35,7 @@ const CarsPage = () => {
           <Flex
             direction="column"
             sx={{
-              width: "70%",
+              width: "100%",
               left: "300px",
               margin: "1em auto",
               height: "100%",

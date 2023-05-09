@@ -79,13 +79,18 @@ const NotFoundPage = () => {
           maw={240}
           mx="auto"
           radius="md"
-          src="/logo-gari.png"
+          src="https://res.cloudinary.com/dzkgmwejb/image/upload/v1683654175/gari/tinywow_404-error-page-with-yellow-floor-sign-aside-3d-rendering_22766037_rqeudq.webp"
           alt="Random image"
           className={classes.image}
           sx={{ margin: "1em 0" }}
         />
 
-        <div className={classes.content}>
+        <div
+          className={classes.content}
+          style={{
+            background:
+              "https://res.cloudinary.com/dzkgmwejb/image/upload/v1683654175/gari/tinywow_404-error-page-with-yellow-floor-sign-aside-3d-rendering_22766037_rqeudq.webp",
+          }}>
           <Title className={classes.title}>Il n'y a rien ici</Title>
           <Text
             color="dimmed"
