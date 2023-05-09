@@ -21,6 +21,7 @@ import {
   IconLogout,
   IconHome2,
   IconUsers,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 // import { MantineLogo } from "@mantine/ds";
@@ -102,6 +103,7 @@ const data = [
   { link: "/cars", label: "Voitures", icon: IconCar },
   { link: "/services", label: "Services", icon: IconHotelService },
   { link: "/settings", label: "Paramètres", icon: IconSettings },
+  { link: "/users", label: "Utilisateurs", icon: IconUsersGroup },
 ];
 
 export function NavbarSimple() {

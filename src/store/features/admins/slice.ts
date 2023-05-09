@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { login } from "./thunk";
+import { login, getUsers, createAccount } from "./thunk";
+
 
 
 interface UsersState {
@@ -76,30 +77,54 @@ export const adminSlice = createSlice({
                 }
             })
 
-        // .addCase(createAccount.pending, (state: any, action: any) => {
-        //     return {
-        //         ...state,
-        //         isCreating: true,
-        //         hasError: false
-        //     }
-        // })
+            .addCase(getUsers.pending, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isLoading: true,
+                    hasError: false
+                }
+            })
 
-        // .addCase(createAccount.fulfilled, (state: any, action: any) => {
-        //     return {
-        //         ...state,
-        //         isCreating: false,
-        //         hasError: false,
-        //         new: action.payload
-        //     }
-        // })
+            .addCase(getUsers.fulfilled, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                    items: action.payload
+                }
+            })
 
-        // .addCase(createAccount.rejected, (state: any, action: any) => {
-        //     return {
-        //         ...state,
-        //         isCreating: false,
-        //         hasError: true
-        //     }
-        // })
+            .addCase(getUsers.rejected, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: true
+                }
+            })
+            .addCase(createAccount.pending, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isCreating: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(createAccount.fulfilled, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isCreating: false,
+                    hasError: false,
+                    new: action.payload
+                }
+            })
+
+            .addCase(createAccount.rejected, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isCreating: false,
+                    hasError: true
+                }
+            })
 
         // .addCase(updateUser.pending, (state: any, action: any) => {
         //     return {
