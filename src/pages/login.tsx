@@ -16,7 +16,31 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/features/admins/thunk";
-import { setError, setAuth } from "../store/features/admins/slice";
+import { setError, setAuth, setLogging } from "../store/features/admins/slice";
+import axios from "axios";
+
+const ErrorMessage = () => {
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <p>
+        Une erreur s`est produite, le mot de passe ou le nom d`utilisateur est
+        incorrect !
+      </p>
+
+      <Button
+        type="reset"
+        onClick={() => {
+          // dispatch(setLogging(false));
+          dispatch(setError(false));
+          window.location.reload();
+        }}>
+        veuillez réessayer
+      </Button>
+    </div>
+  );
+};
 
 const LoginPage = (props: PaperProps) => {
   const [type, toggle] = useToggle(["Se connecter", "register"]);
@@ -41,19 +65,7 @@ const LoginPage = (props: PaperProps) => {
   const dispatch = useDispatch<any>();
 
   const hasError = useSelector((state: any) => state.admin.hasError);
-
-  if (hasError) {
-    toast("Une erreur s'est produite lors de la connexion", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  }
+  const logging = useSelector((state: any) => state.admin.logging);
 
   return (
     <div
@@ -81,34 +93,50 @@ const LoginPage = (props: PaperProps) => {
         <form
           onSubmit={form.onSubmit(async () => {
             await toast.promise(
-              dispatch(
-                login({
+              axios({
+                method: "POST",
+                url: `${process.env.REACT_APP_API_URL}auth/login`,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                data: {
                   email: form.values.email,
                   password: form.values.password,
+                },
+              })
+                .then((response) => {
+                  localStorage.setItem("gari", response.data.token);
+                  localStorage.setItem(
+                    "loggedUser",
+                    JSON.stringify(response.data.user),
+                  );
+
+                  navigate("/", { replace: true });
+                  setTimeout(() => {
+                    dispatch(setAuth(true));
+
+                    dispatch(setLogging(false));
+                    window.location.reload();
+                  }, 5000);
+                  toast.success(
+                    "Connexion réussie ! Vous serez redirigés dans quelques sécondes",
+                    {
+                      position: toast.POSITION.TOP_RIGHT,
+                    },
+                  );
+                })
+                .catch((error) => {
+                  dispatch(setError(true));
+                  toast.error(<ErrorMessage />, {
+                    position: toast.POSITION.TOP_RIGHT,
+                  });
                 }),
-              ),
               {
                 pending: "Connexion en cours",
-                success: "Connexion reussie",
+                success: "Connexion reussie !",
                 error: "Une erreur s'est produite lors de la connexion",
               },
             );
-            navigate("/", { replace: true });
-
-            // setTimeout(() => {
-            //   dispatch(setError(true));
-            // }, 6000);
-            setTimeout(() => {
-              dispatch(setAuth(true));
-              window.location.reload();
-            }, 5000);
-            toast.success(
-              "Connexion réussie ! Vous serez redirigés dans quelques sécondes",
-              {
-                position: toast.POSITION.TOP_RIGHT,
-              },
-            );
-
           })}>
           <Stack>
             <TextInput
