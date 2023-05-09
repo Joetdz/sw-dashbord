@@ -20,6 +20,7 @@ import SingleCarPage from "./pages/singleCar";
 import PepoCarDetails from "./pages/singlePepoCar";
 import NotFoundPage from "./pages/notFound";
 import UsersPage from "./pages/users";
+import SingleUserPage from "./pages/singleUser";
 import { setAuth } from "./store/features/admins/slice";
 import "./App.css";
 
@@ -93,6 +94,7 @@ function App() {
             <Route path="/pepo/cars/:id" element={<PepoCarDetails />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/:id" element={<SingleUserPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </>
         )}

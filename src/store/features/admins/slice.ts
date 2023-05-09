@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { login, getUsers, createAccount } from "./thunk";
+import { login, getUsers, createAccount, getOneUser, updateUser } from "./thunk";
 
 
 
@@ -14,6 +14,7 @@ interface UsersState {
     new: string,
     isLoading: boolean,
     items: string[],
+    singleUserDetails: string
 }
 
 const initialState = {
@@ -26,7 +27,8 @@ const initialState = {
     isUpdating: false,
     new: "",
     items: [],
-    isLoading: false
+    isLoading: false,
+    singleUserDetails: ""
 } as UsersState;
 
 export const adminSlice = createSlice({
@@ -126,27 +128,52 @@ export const adminSlice = createSlice({
                 }
             })
 
-        // .addCase(updateUser.pending, (state: any, action: any) => {
-        //     return {
-        //         ...state,
-        //         isUpdating: true,
-        //         hasError: false
-        //     }
-        // })
-        // .addCase(updateUser.fulfilled, (state: any, action: any) => {
-        //     return {
-        //         ...state,
-        //         isUpdating: false,
-        //         hasError: false
-        //     }
-        // })
-        // .addCase(updateUser.rejected, (state: any, action: any) => {
-        //     return {
-        //         ...state,
-        //         isUpdating: false,
-        //         hasError: true
-        //     }
-        // })
+            .addCase(getOneUser.pending, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isLoading: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(getOneUser.fulfilled, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                    singleUserDetails: action.payload
+                }
+            })
+
+            .addCase(getOneUser.rejected, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: true,
+                }
+            })
+
+            .addCase(updateUser.pending, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isUpdating: true,
+                    hasError: false
+                }
+            })
+            .addCase(updateUser.fulfilled, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: false
+                }
+            })
+            .addCase(updateUser.rejected, (state: any, action: any) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: true
+                }
+            })
 
         // .addCase(getCompanyUsers.pending, (state: any, action) => {
         //     return {

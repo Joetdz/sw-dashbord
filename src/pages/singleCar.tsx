@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, isNotEmpty, hasLength } from "@mantine/form";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Loader,
   Flex,
@@ -24,6 +24,7 @@ const SingleCarPage = () => {
   const { id } = useParams<{ id?: string }>();
 
   const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getSingleCar(id));
   }, [dispatch]);
@@ -225,7 +226,7 @@ const SingleCarPage = () => {
                           "Une erreur s'est produite lors de la modification",
                       },
                     );
-
+                    navigate("/cars", { replace: true });
                     window.location.reload();
                   })}>
                   <Stack>
@@ -306,7 +307,6 @@ const SingleCarPage = () => {
                                 )
                               : ""
                           }
-                          
                           required
                           withAsterisk
                         />
