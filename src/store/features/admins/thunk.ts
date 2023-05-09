@@ -39,6 +39,8 @@ export const login = createAsyncThunk("admin/login", async (content: { email: st
             localStorage.setItem("gari", response.data.token)
             localStorage.setItem("loggedUser", JSON.stringify(response.data.user))
         })
+    
+        .catch((error) => error.status)
 })
 
 

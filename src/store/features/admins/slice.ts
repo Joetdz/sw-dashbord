@@ -39,6 +39,12 @@ export const adminSlice = createSlice({
                 isLoggedIn: action.payload
             }
         },
+        setLogging: (state, action) => {
+            return {
+                ...state,
+                logging: action.payload,
+            };
+        },
         setError(state, action: PayloadAction<boolean>) {
             return {
                 ...state,
@@ -58,13 +64,15 @@ export const adminSlice = createSlice({
                 return {
                     ...state,
                     logging: "succeeded",
-                    loggedUser: action.payload
+                    loggedUser: action.payload,
+
                 }
             })
             .addCase(login.rejected, (state: any, action: any) => {
                 return {
                     ...state,
-                    logging: "failed"
+                    logging: "failed",
+                    hasError: true
                 }
             })
 
@@ -141,7 +149,7 @@ export const adminSlice = createSlice({
 })
 
 
-export const { setAuth, setError } = adminSlice.actions;
+export const { setAuth, setError, setLogging } = adminSlice.actions;
 
 
 export default adminSlice;
