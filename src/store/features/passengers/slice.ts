@@ -1,5 +1,5 @@
 import { createSlice, } from "@reduxjs/toolkit";
-import { getPassengers } from "./thunk";
+import { getPassengers, getSinglePassenger } from "./thunk";
 
 
 
@@ -11,7 +11,7 @@ interface DriverState {
     new: string,
     isLoading: boolean,
     items: string[],
-    singleDriverDetails: string,
+    singlePassengerDetails: string,
     isActiving: boolean,
     isDeactivating: boolean,
 }
@@ -24,7 +24,7 @@ const initialState = {
     new: "",
     items: [],
     isLoading: false,
-    singleDriverDetails: "",
+    singlePassengerDetails: "",
     isActiving: false,
     isDeactivating: false
 } as DriverState;
@@ -41,6 +41,7 @@ export const passengerSlice = createSlice({
                     ...state,
                     isLoading: true,
                     hasError: false
+
                 }
             })
 
@@ -57,6 +58,32 @@ export const passengerSlice = createSlice({
                     ...state,
                     isLoading: false,
                     hasError: true,
+                }
+            })
+
+
+            .addCase(getSinglePassenger.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(getSinglePassenger.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                    singlePassengerDetails: action.payload
+                }
+            })
+
+            .addCase(getSinglePassenger.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: true
                 }
             })
     }

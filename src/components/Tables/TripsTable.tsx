@@ -208,7 +208,7 @@ export function TripsTable({ data }: TableSortProps) {
         {/* <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
         </Link> */}
       </td>
-      <td>
+      {/* <td>
         <Button
           onClick={async () => {
             await dispatch(deactivateDriver(row.uid));
@@ -221,7 +221,7 @@ export function TripsTable({ data }: TableSortProps) {
           }}>
           Voir les détails
         </Button>
-      </td>
+      </td> */}
     </tr>
   ));
 
@@ -272,13 +272,13 @@ export function TripsTable({ data }: TableSortProps) {
               onSort={() => setSorting("car")}>
               Véhicule utilisé
             </Th>
-
+{/* 
             <Th
               sorted={sortBy === "action"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("action")}>
               Actions utilisateurs
-            </Th>
+            </Th> */}
           </tr>
         </thead>
         <tbody>

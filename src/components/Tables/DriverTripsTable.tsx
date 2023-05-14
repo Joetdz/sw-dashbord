@@ -52,13 +52,42 @@ const useStyles = createStyles((theme) => ({
 
 interface RowData {
   uid: string;
-  name: string;
-  password: string;
-  phone: string;
-  gender: string;
 
+  pepo: boolean;
+  canceled: boolean;
   email: string;
   action: any;
+  car: {
+    uid: string;
+    model: string;
+  };
+  passenger: {
+    uid: string;
+    phone: number;
+    name: string;
+  };
+  driver: {
+    uid: string;
+    phone: number;
+    name: string;
+  };
+
+  taxType: string;
+  locations: {
+    distance: number;
+    from: {
+      latitude: number;
+      name: string;
+      alias: null;
+      longitude: number;
+    };
+    to: {
+      latitude: number;
+      name: string;
+      alias: null;
+      longitude: number;
+    };
+  };
 }
 
 interface TableSortProps {
@@ -127,7 +156,7 @@ function sortData(
   );
 }
 
-export function PassengersTable({ data }: TableSortProps) {
+export function DriversTripsTable({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
@@ -154,76 +183,89 @@ export function PassengersTable({ data }: TableSortProps) {
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
-        <Link to={`/passengers/${row.uid}`}>{row.name}</Link>
+        {row.locations.from.name}
+        {/* <Link to={`/trips/${row.uid}`}>
+          
+        </Link> */}
       </td>
       <td>
-        <Link to={`/passengers/${row.uid}`}>{row.phone}</Link>
+        {row.locations.to.name}
+        {/* <Link to={`/trips/${row.uid}`}>
+        
+        </Link> */}
       </td>
-      <td>{!row.email ? "---" : row.email}</td>
       <td>
+        {/* <Link to={`/passengers/${row.uid}`}>
+        </Link> */}
+        {row.passenger && row.passenger.name}
+      </td>
+
+      <td>
+        {row.car && row.car.model}
+        {/* <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
+        </Link> */}
+      </td>
+      {/* <td>
         <Button
-          onClick={async () => {
-            await dispatch(deactivateDriver(row.uid));
-            await dispatch(getDrivers());
-          }}
           sx={{
             background: "#F31D1D",
             borderRadius: "25px",
             fontSize: ".8em",
           }}>
-          Voir les courses
+          Voir les détails
         </Button>
-      </td>
+      </td> */}
     </tr>
   ));
 
   return (
     <ScrollArea>
-      <TextInput
+      {/* <TextInput
         placeholder="Rechercher ici"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
-      />
+      /> */}
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
-        miw={700}
+        miw={800}
         sx={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
             <Th
-              sorted={sortBy === "name"}
+              sorted={sortBy === "locations"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}>
-              Nom
+              onSort={() => setSorting("locations")}>
+              Départ
             </Th>
             <Th
-              sorted={sortBy === "phone"}
+              sorted={sortBy === "locations"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("phone")}>
-              Numéro de téléphone
+              onSort={() => setSorting("locations")}>
+              Destination
             </Th>
             <Th
-              sorted={sortBy === "email"}
+              sorted={sortBy === "passenger"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("email")}>
-              Email
+              onSort={() => setSorting("passenger")}>
+              Passager
             </Th>
-            {/* <Th
-              sorted={sortBy === "address"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("address")}>
-              Adresse
-            </Th> */}
 
             <Th
+              sorted={sortBy === "car"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("car")}>
+              Véhicule utilisé
+            </Th>
+
+            {/* <Th
               sorted={sortBy === "action"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("action")}>
               Actions utilisateurs
-            </Th>
+            </Th> */}
           </tr>
         </thead>
         <tbody>

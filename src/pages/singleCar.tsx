@@ -156,7 +156,7 @@ const SingleCarPage = () => {
                 </Flex>
 
                 <Flex direction="row">
-                  <Button
+                  {/* <Button
                     onClick={() => setEdit(true)}
                     style={{
                       background: "#F31D1D",
@@ -164,7 +164,7 @@ const SingleCarPage = () => {
                       marginRight: "2em",
                     }}>
                     Supprimer
-                  </Button>
+                  </Button> */}
 
                   <Button
                     onClick={() => setEdit(true)}
@@ -178,9 +178,6 @@ const SingleCarPage = () => {
                 <Title order={1}>Modifier une voiture</Title>
                 <form
                   onSubmit={form.onSubmit(async () => {
-                    console.log(form.values.prices.km.currency);
-                    console.log(form.values.prices.hour.currency);
-                    console.log(form.values.prices.minute.currency);
                     await toast.promise(
                       dispatch(
                         updateCar({
@@ -379,6 +376,7 @@ const SingleCarPage = () => {
                         {
                           background: "#F31D1D",
                           borderRadius: "25px",
+
                           marginRight: "2em",
                         },
                         {

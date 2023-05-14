@@ -1,5 +1,5 @@
 import { createSlice, } from "@reduxjs/toolkit";
-import { getDrivers, activateDriver, deactivateDriver } from "./thunk";
+import { getDrivers, activateDriver, deactivateDriver, getSingleDriver } from "./thunk";
 
 
 
@@ -107,7 +107,35 @@ export const driverSlice = createSlice({
                     hasError: false
                 }
             })
+        
+            .addCase(getSingleDriver.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: true,
+                    hasError: false
+                }
+            })
+        
+            .addCase(getSingleDriver.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: false,
+                    singleDriverDetails: action.payload
+
+                }
+            })
+        
+        
+            .addCase(getSingleDriver.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    hasError: true
+                }
+            })
     }
+
 
 })
 export default driverSlice

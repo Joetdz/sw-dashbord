@@ -59,9 +59,23 @@ const SettingsPage = () => {
                   Course taxée par :{" "}
                   {settings.items.taxType === "hour" ? "Heure" : "Minute"}
                 </Text>
-                  <Button onClick={() => setEdit(true)}
-                  sx={{width: "20%"}}
-                  >Modifier</Button>
+                <Button
+                  onClick={() => setEdit(true)}
+                  sx={[
+                    {
+                      background: "#0C3966",
+                      borderRadius: "25px",
+                      marginBottom: "20px",
+                      width: "20%",
+                    },
+                    {
+                      "&:hover": {
+                        background: "#01101E",
+                      },
+                    },
+                  ]}>
+                  Modifier
+                </Button>
               </>
             ) : (
               <form
@@ -95,7 +109,37 @@ const SettingsPage = () => {
                     // console.log(event.currentTarget.value)
                   }
                 />
-                <Button type="submit">Enregistrer</Button>
+
+                <Flex direction="row" sx={{ margin: "2em 0" }}>
+                  <Button
+                    onClick={() => setEdit(false)}
+                    sx={[
+                      {
+                        background: "#F31D1D",
+                        borderRadius: "25px",
+                        marginRight: "2em",
+                      },
+                      {
+                        "&:hover": {
+                          background: "#F9A507",
+                        },
+                      },
+                    ]}>
+                    Annuler
+                  </Button>
+                  <Button
+                    type="submit"
+                    sx={[
+                      { background: "#0C3966", borderRadius: "25px" },
+                      {
+                        "&:hover": {
+                          background: "#F9A507",
+                        },
+                      },
+                    ]}>
+                    Enregistrer
+                  </Button>
+                </Flex>
               </form>
             )}
             {/* <Switch
