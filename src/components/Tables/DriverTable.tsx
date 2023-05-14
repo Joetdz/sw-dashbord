@@ -29,6 +29,7 @@ import { Link } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
   th: {
     padding: "0 !important",
+    fontSize: ".8em !important"
   },
 
   control: {
@@ -222,7 +223,7 @@ export function DriverTable({ data }: TableSortProps) {
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
-        miw={700}
+        miw={800}
         sx={{ tableLayout: "fixed" }}>
         <thead>
           <tr>

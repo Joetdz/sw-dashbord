@@ -12,6 +12,15 @@ export const getDrivers = createAsyncThunk("drivers/getDrivers", async () => {
         }
     }).then((response) => response.data)
 })
+export const getSingleDriver = createAsyncThunk("drivers/getSingleDriver", async (id: string | undefined) => {
+    return axios({
+        method: "GET",
+        url: `${process.env.REACT_APP_API_URL}drivers/${id}`,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then((response) => response.data)
+})
 
 
 
