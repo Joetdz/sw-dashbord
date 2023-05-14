@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useForm, isNotEmpty, hasLength } from "@mantine/form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+import { IconIdBadge2, IconBrandTripadvisor } from "@tabler/icons-react";
 import {
   Loader,
   Flex,
@@ -23,8 +23,8 @@ import {
   activateDriver,
   deactivateDriver,
 } from "../store/features/drivers/thunk";
-import { CurrencyInput } from "../components/Popup/Car/AddCarForm";
-import { toast, ToastContainer } from "react-toastify";
+import { getTrips } from "../store/features/trips/thunk";
+import { DriversTripsTable } from "../components/Tables/DriverTripsTable";
 
 const SingleDriver = () => {
   const { id } = useParams<{ id?: string }>();
@@ -34,9 +34,17 @@ const SingleDriver = () => {
 
   useEffect(() => {
     dispatch(getSingleDriver(id));
+    dispatch(getTrips());
   }, [dispatch]);
 
   const drivers = useSelector((state: any) => state.drivers);
+
+  const trips = useSelector((state: any) => state.trips);
+
+  const driversTrips = trips.items.filter(
+    (trips: any) => trips.driver && trips.driver.uid === id,
+  );
+
   return (
     <div style={{ display: "flex" }}>
       <NavbarSimple />
@@ -52,15 +60,12 @@ const SingleDriver = () => {
               <Tabs.List>
                 <Tabs.Tab
                   value="identity"
-
-                  //   icon={<IconPhoto size="0.8rem" />}
-                >
+                  icon={<IconIdBadge2 size="0.8rem" />}>
                   Identité
                 </Tabs.Tab>
                 <Tabs.Tab
                   value="trips"
-                  //   icon={<IconMessageCircle size="0.8rem" />}
-                >
+                  icon={<IconBrandTripadvisor size="0.8rem" />}>
                   Courses
                 </Tabs.Tab>
               </Tabs.List>
@@ -132,7 +137,26 @@ const SingleDriver = () => {
               </Tabs.Panel>
 
               <Tabs.Panel value="trips" pt="xs">
-                Trips tab content
+                {trips.isLoading ? (
+                  <Flex
+                    align="center"
+                    justify="center"
+                    sx={{ height: "100%", width: "100%" }}>
+                    <Loader />
+                  </Flex>
+                ) : (
+                  <Flex
+                    direction="column"
+                    sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
+                    {driversTrips.length <= 0 ? (
+                      <Text>
+                        Aucune course n'a été effectué par ce chauffeur
+                      </Text>
+                    ) : (
+                      <DriversTripsTable data={driversTrips} />
+                    )}
+                  </Flex>
+                )}
               </Tabs.Panel>
             </Tabs>
           </Container>

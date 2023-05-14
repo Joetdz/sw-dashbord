@@ -156,7 +156,7 @@ function sortData(
   );
 }
 
-export function TripsTable({ data }: TableSortProps) {
+export function DriversTripsTable({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
@@ -199,10 +199,7 @@ export function TripsTable({ data }: TableSortProps) {
         </Link> */}
         {row.passenger && row.passenger.name}
       </td>
-      <td>
-        {/* <Link to={`/drivers/${row.uid}`}></Link> */}
-        {row.driver && row.driver.name}
-      </td>
+
       <td>
         {row.car && row.car.model}
         {/* <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
@@ -210,10 +207,6 @@ export function TripsTable({ data }: TableSortProps) {
       </td>
       {/* <td>
         <Button
-          onClick={async () => {
-            await dispatch(deactivateDriver(row.uid));
-            await dispatch(getDrivers());
-          }}
           sx={{
             background: "#F31D1D",
             borderRadius: "25px",
@@ -259,12 +252,6 @@ export function TripsTable({ data }: TableSortProps) {
               onSort={() => setSorting("passenger")}>
               Passager
             </Th>
-            <Th
-              sorted={sortBy === "driver"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("driver")}>
-              Chauffeur
-            </Th>
 
             <Th
               sorted={sortBy === "car"}
@@ -272,8 +259,8 @@ export function TripsTable({ data }: TableSortProps) {
               onSort={() => setSorting("car")}>
               Véhicule utilisé
             </Th>
-{/* 
-            <Th
+
+            {/* <Th
               sorted={sortBy === "action"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("action")}>
