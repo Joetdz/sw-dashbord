@@ -47,7 +47,13 @@ const HomePage = () => {
     dispatch(getDrivers());
   }, [dispatch]);
 
+  const date = new Date();
+
   const trips = useSelector((state: any) => state.trips);
+
+  const dayTrips = trips.items.filter(
+    (trips: any) => trips.timeStamps.command === date,
+  );
 
   const passengers = useSelector((state: any) => state.passengers);
   const drivers = useSelector((state: any) => state.drivers);
@@ -74,14 +80,12 @@ const HomePage = () => {
           <Flex
             direction="column"
             sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
-            {drivers.items.length <= 0 ? (
-              <Text>Une erreur s'est produite lors de la requête</Text>
+            {dayTrips.length <= 0 ? (
+              <Text>Aucune course aujourd'hui</Text>
             ) : (
               <>
-                
-                  <Text>Les courses</Text>
-                  <TripsTable data={trips.items} />
-                
+                <Text>Les courses</Text>
+                <TripsTable data={dayTrips} />
 
                 {/* <DriverTable data={drivers.items} />
                 <PassengersTable data={passengers.items} /> */}

@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Loader, Text } from "@mantine/core";
 import { NavbarSimple } from "../components/SideBar";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
-import { TableSort } from "../components/Tables/CarTable";
-import { getCars } from "../store/features/cars/thunk";
 import { getUsers } from "../store/features/admins/thunk";
 import { Flex, Group, Button } from "@mantine/core";
 import CarPopup from "../components/Popup/Car/CarPopUp";
