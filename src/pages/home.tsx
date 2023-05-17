@@ -56,7 +56,7 @@ const HomePage = () => {
   const trips = useSelector((state: any) => state.trips);
 
   const dayTrips = trips.items.filter(
-    (trips: any) => trips.timeStamps.command._seconds === timestamp,
+    (trips: any) => trips.timeStamps.command._seconds === date,
   );
 
   console.log(dayTrips);
