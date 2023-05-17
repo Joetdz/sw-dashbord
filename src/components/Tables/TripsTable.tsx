@@ -88,6 +88,12 @@ interface RowData {
       longitude: number;
     };
   };
+  timeStamps: {
+    command: Date;
+    assignedToADriver: Date;
+    passengerFound: Date;
+    end: Date;
+  };
 }
 
 interface TableSortProps {
@@ -195,6 +201,32 @@ export function TripsTable({ data }: TableSortProps) {
         </Link> */}
       </td>
       <td>
+        <span style={{ color: "#F31D1D" }}>{row.canceled && "Annulée"}</span>
+
+        <span style={{ color: "#0C3966" }}>
+          {row.timeStamps.command &&
+            !row.timeStamps.assignedToADriver &&
+            !row.canceled &&
+            !row.timeStamps.end &&
+            "En attente"}
+        </span>
+        <span style={{ color: "#F55D2C" }}>
+          {row.timeStamps.command &&
+            row.timeStamps.assignedToADriver &&
+            !row.canceled &&
+            !row.timeStamps.end &&
+            "En cours"}
+        </span>
+
+        <span style={{ color: "green" }}>
+          {row.timeStamps.command &&
+            row.timeStamps.assignedToADriver &&
+            !row.canceled &&
+            row.timeStamps.end &&
+            "Terminée"}
+        </span>
+      </td>
+      <td>
         {/* <Link to={`/passengers/${row.uid}`}>
         </Link> */}
         {row.passenger && row.passenger.name}
@@ -208,6 +240,7 @@ export function TripsTable({ data }: TableSortProps) {
         {/* <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
         </Link> */}
       </td>
+      <td>{row.pepo ? "Course pepo" : "Express"}</td>
       {/* <td>
         <Button
           onClick={async () => {
@@ -237,7 +270,7 @@ export function TripsTable({ data }: TableSortProps) {
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
-        miw={800}
+        miw={1400}
         sx={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
@@ -252,6 +285,12 @@ export function TripsTable({ data }: TableSortProps) {
               reversed={reverseSortDirection}
               onSort={() => setSorting("locations")}>
               Destination
+            </Th>
+            <Th
+              sorted={sortBy === "canceled"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("canceled")}>
+              Etat de la course
             </Th>
             <Th
               sorted={sortBy === "passenger"}
@@ -272,13 +311,13 @@ export function TripsTable({ data }: TableSortProps) {
               onSort={() => setSorting("car")}>
               Véhicule utilisé
             </Th>
-{/* 
+
             <Th
               sorted={sortBy === "action"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("action")}>
-              Actions utilisateurs
-            </Th> */}
+              Type de course
+            </Th>
           </tr>
         </thead>
         <tbody>
