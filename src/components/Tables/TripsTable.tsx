@@ -185,6 +185,7 @@ export function TripsTable({ data }: TableSortProps) {
   };
 
   const dispatch = useDispatch<any>();
+  
 
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
@@ -201,7 +202,11 @@ export function TripsTable({ data }: TableSortProps) {
         </Link> */}
       </td>
       <td>
-        <span style={{ color: "#F31D1D" }}>{row.canceled && "Annulée"}</span>
+        <span style={{ color: "#F31D1D" }}>
+          {row.canceled && "Annulée"}
+
+          
+        </span>
 
         <span style={{ color: "#0C3966" }}>
           {row.timeStamps.command &&
@@ -217,7 +222,6 @@ export function TripsTable({ data }: TableSortProps) {
             !row.timeStamps.end &&
             "En cours"}
         </span>
-
         <span style={{ color: "green" }}>
           {row.timeStamps.command &&
             row.timeStamps.assignedToADriver &&
