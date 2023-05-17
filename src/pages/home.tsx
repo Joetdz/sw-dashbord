@@ -47,13 +47,19 @@ const HomePage = () => {
     dispatch(getDrivers());
   }, [dispatch]);
 
+  const miliseconds = 1604395966369;
   const date = new Date();
+
+  const currentDate = new Date();
+  const timestamp = currentDate.getTime();
 
   const trips = useSelector((state: any) => state.trips);
 
   const dayTrips = trips.items.filter(
-    (trips: any) => trips.timeStamps.command === date,
+    (trips: any) => trips.timeStamps.command._seconds === timestamp,
   );
+
+  console.log(dayTrips);
 
   const passengers = useSelector((state: any) => state.passengers);
   const drivers = useSelector((state: any) => state.drivers);
