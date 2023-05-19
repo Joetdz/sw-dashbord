@@ -11,6 +11,10 @@ import { getTrips } from "../store/features/trips/thunk";
 import { getDrivers } from "../store/features/drivers/thunk";
 import { getPassengers } from "../store/features/passengers/thunk";
 
+const dateConverter = (time: any) => {
+  return new Date(time * 1000).toDateString();
+};
+
 const HomePage = () => {
   const loggedUser: any = localStorage.getItem("loggedUser");
   const user = JSON.parse(loggedUser);
@@ -48,7 +52,7 @@ const HomePage = () => {
   }, [dispatch]);
 
   const miliseconds = 1604395966369;
-  const date = new Date();
+  const date = new Date().toDateString();
 
   const currentDate = new Date();
   const timestamp = currentDate.getTime();
@@ -56,10 +60,21 @@ const HomePage = () => {
   const trips = useSelector((state: any) => state.trips);
 
   const dayTrips = trips.items.filter(
-    (trips: any) => trips.timeStamps.command._seconds === timestamp,
+    (trips: any) => dateConverter(trips.timeStamps.command._seconds) === date,
   );
 
-  console.log(dayTrips);
+  // console.log(
+  //   trips.items.map((trips: any) =>
+  //     dateConverter(trips.timeStamps.command._seconds) === date,
+  //   ),
+  // );
+
+  // console.log({ dayTrips, date });
+
+  // console.log(
+  //   new Date(trips.items.timeStamps.command._seconds * 1000).toLocaleString(),
+  // );
+  // console.log(dayTrips);
 
   const passengers = useSelector((state: any) => state.passengers);
   const drivers = useSelector((state: any) => state.drivers);
@@ -87,10 +102,14 @@ const HomePage = () => {
             direction="column"
             sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
             {dayTrips.length <= 0 ? (
-              <Text>Aucune course aujourd'hui</Text>
+              <Text fw={700} size="xl">
+                Aucune course aujourd'hui
+              </Text>
             ) : (
               <>
-                <Text>Les courses</Text>
+                <Text fw={700} size="xl">
+                  Les courses du jour
+                </Text>
                 <TripsTable data={dayTrips} />
 
                 {/* <DriverTable data={drivers.items} />
