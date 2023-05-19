@@ -86,12 +86,16 @@ const HomePage = () => {
           <Flex
             direction="column"
             sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
-            {dayTrips.length <= 0 ? (
-              <Text>Aucune course aujourd'hui</Text>
+            {trips.items.length <= 0 ? (
+              <Text fw={700} size="xl">
+                Aucune course aujourd'hui
+              </Text>
             ) : (
               <>
-                <Text>Les courses</Text>
-                <TripsTable data={dayTrips} />
+                <Text fw={700} size="xl">
+                  Les courses
+                </Text>
+                <TripsTable data={trips.items} />
 
                 {/* <DriverTable data={drivers.items} />
                 <PassengersTable data={passengers.items} /> */}

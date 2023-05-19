@@ -24,7 +24,7 @@ import {
   IconChevronUp,
   IconSearch,
 } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -151,6 +151,8 @@ export function PassengersTable({ data }: TableSortProps) {
 
   const dispatch = useDispatch<any>();
 
+  const navigate = useNavigate();
+
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
@@ -162,16 +164,15 @@ export function PassengersTable({ data }: TableSortProps) {
       <td>{!row.email ? "---" : row.email}</td>
       <td>
         <Button
-          onClick={async () => {
-            await dispatch(deactivateDriver(row.uid));
-            await dispatch(getDrivers());
+          onClick={() => {
+            navigate(`/passengers/${row.uid}`, { replace: false });
           }}
           sx={{
             background: "#F31D1D",
             borderRadius: "25px",
             fontSize: ".8em",
           }}>
-          Voir les courses
+          Voir les détails
         </Button>
       </td>
     </tr>
