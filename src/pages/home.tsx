@@ -101,7 +101,7 @@ const HomePage = () => {
           <Flex
             direction="column"
             sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
-            {trips.items.length <= 0 ? (
+            {dayTrips.length <= 0 ? (
               <Text fw={700} size="xl">
                 Aucune course aujourd'hui
               </Text>
