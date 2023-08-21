@@ -76,6 +76,7 @@ const LoginPage = (props: PaperProps) => {
         flexDirection: "column",
         height: "100vh",
         background: "#0C3966",
+        padding: "0 2rem",
       }}>
       <Image
         maw={240}
