@@ -19,9 +19,26 @@ import { NavbarSimple } from "../components/SideBar";
 import { getSinglePepoCar, updatePepoCar } from "../store/features/pepo/thunk";
 import { CurrencyInput } from "../components/Popup/Car/AddCarForm";
 import { toast, ToastContainer } from "react-toastify";
+import Header from "../components/Header";
 
 const PepoCarDetails = () => {
   const { id } = useParams<{ id?: string }>();
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   const dispatch = useDispatch<any>();
   useEffect(() => {
@@ -67,7 +84,7 @@ const PepoCarDetails = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
 
       <PageLayoutTemplate>
         {pepo.isLoading ? (

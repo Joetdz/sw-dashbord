@@ -14,10 +14,27 @@ import {
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { getSettings, updateTaxType } from "../store/features/settings/thunk";
 import { toast, ToastContainer } from "react-toastify";
+import Header from "../components/Header";
 
 const SettingsPage = () => {
   const [checked, setChecked] = useState(true);
   const dispatch = useDispatch<any>();
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(getSettings());
@@ -40,7 +57,7 @@ const SettingsPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
       <PageLayoutTemplate>
         {settings.isLoading ? (
           <Flex

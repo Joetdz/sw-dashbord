@@ -19,9 +19,26 @@ import { NavbarSimple } from "../components/SideBar";
 import { getSingleCar, updateCar } from "../store/features/cars/thunk";
 import { CurrencyInput } from "../components/Popup/Car/AddCarForm";
 import { toast, ToastContainer } from "react-toastify";
+import Header from "../components/Header";
 
 const SingleCarPage = () => {
   const { id } = useParams<{ id?: string }>();
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
@@ -77,7 +94,7 @@ const SingleCarPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
 
       <PageLayoutTemplate>
         {cars.isLoading ? (

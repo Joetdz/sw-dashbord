@@ -11,11 +11,28 @@ import { NavbarSimple } from "../components/SideBar";
 import { getPassengers } from "../store/features/passengers/thunk";
 import { getTrips } from "../store/features/trips/thunk";
 import { DataTable } from "mantine-datatable";
+import Header from "../components/Header";
 
 const PAGE_SIZES = [10, 15, 20];
 
 const TripsPage = () => {
   const [pageSize, setPageSize] = useState(PAGE_SIZES[1]);
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   useEffect(() => {
     setPage(1);
@@ -50,7 +67,7 @@ const TripsPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
       <PageLayoutTemplate>
         {trips.isLoading ? (
           <Flex

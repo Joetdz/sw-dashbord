@@ -1,12 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Flex, Group, Button, Loader, Text } from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { PassengersTable } from "../components/Tables/PassengersTable";
 import { NavbarSimple } from "../components/SideBar";
 import { getPassengers } from "../store/features/passengers/thunk";
+import Header from "../components/Header";
 
 const PassengersPage = () => {
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
@@ -17,7 +34,7 @@ const PassengersPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
       <PageLayoutTemplate>
         {passengers.isLoading ? (
           <Flex

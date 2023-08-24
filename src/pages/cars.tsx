@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,9 +10,27 @@ import { getCars } from "../store/features/cars/thunk";
 import { Flex, Group, Button } from "@mantine/core";
 import CarPopup from "../components/Popup/Car/CarPopUp";
 import AddCarForm from "../components/Popup/Car/AddCarForm";
+import Header from "../components/Header";
 
 const CarsPage = () => {
   const dispatch = useDispatch<any>();
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
+  
 
   useEffect(() => {
     dispatch(getCars());
@@ -24,7 +42,8 @@ const CarsPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {!opened ? (
+      <>{windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
 
       <PageLayoutTemplate>
         {cars.isLoading ? (
@@ -70,15 +89,13 @@ const CarsPage = () => {
             )}
           </Flex>
         )}
-      </PageLayoutTemplate>
-
-      <CarPopup
+      </PageLayoutTemplate></>) : <CarPopup
         title="Ajouter une voiture"
         content={<AddCarForm close={close} />}
         open={open}
         close={close}
         opened={opened}
-      />
+      />}
     </div>
   );
 };

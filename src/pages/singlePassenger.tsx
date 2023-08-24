@@ -20,9 +20,26 @@ import { NavbarSimple } from "../components/SideBar";
 import { PassengerTripsTable } from "../components/Tables/PassengerTripsTable";
 import { getTrips } from "../store/features/trips/thunk";
 import { getSinglePassenger } from "../store/features/passengers/thunk";
+import Header from "../components/Header";
 
 const SinglePassenger = () => {
   const { id } = useParams<{ id?: string }>();
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
@@ -41,7 +58,7 @@ const SinglePassenger = () => {
    );
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
 
       <PageLayoutTemplate>
         {passengers.isLoading ? (

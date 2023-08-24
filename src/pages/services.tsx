@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader, Text, Flex, Button, Group } from "@mantine/core";
@@ -8,8 +8,25 @@ import { getPepoCars } from "../store/features/pepo/thunk";
 import { PepoCarTable } from "../components/Tables/PepoCarTable";
 import CarPopup from "../components/Popup/Car/CarPopUp";
 import AddPepoCarForm from "../components/Popup/Car/AddPepoCarForm";
+import Header from "../components/Header";
 
 const ServicesPage = () => {
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
@@ -22,7 +39,7 @@ const ServicesPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
       <PageLayoutTemplate>
         {pepoCars.isLoading ? (
           <Flex

@@ -1,12 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Flex, Group, Button, Loader, Text } from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { getDrivers } from "../store/features/drivers/thunk";
 import { NavbarSimple } from "../components/SideBar";
 import { DriverTable } from "../components/Tables/DriverTable";
+import Header from "../components/Header";
 
 const DriversPage = () => {
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
+
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
@@ -17,7 +35,7 @@ const DriversPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
       <PageLayoutTemplate>
         {drivers.isLoading ? (
           <Flex

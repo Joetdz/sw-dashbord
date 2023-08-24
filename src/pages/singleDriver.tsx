@@ -25,9 +25,26 @@ import {
 } from "../store/features/drivers/thunk";
 import { getTrips } from "../store/features/trips/thunk";
 import { DriversTripsTable } from "../components/Tables/DriverTripsTable";
+import Header from "../components/Header";
 
 const SingleDriver = () => {
   const { id } = useParams<{ id?: string }>();
+  const [windowSize, setWindowSize] = useState([
+		window.innerWidth,
+		window.innerHeight,
+	]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
@@ -47,7 +64,7 @@ const SingleDriver = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <NavbarSimple />
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
 
       <PageLayoutTemplate>
         {drivers.isLoading ? (
