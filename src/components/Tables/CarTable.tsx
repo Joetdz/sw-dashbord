@@ -158,6 +158,12 @@ export function TableSort({ data }: TableSortProps) {
       <td>
         {row.prices.km.price} {row.prices.km.currency}
       </td>
+      <td>
+        {row.prices.hour.price} {row.prices.hour.currency}
+      </td>
+      <td>
+        {row.prices.minute.price} {row.prices.minute.currency}
+      </td>
     </tr>
   ));
 
@@ -187,7 +193,19 @@ export function TableSort({ data }: TableSortProps) {
               sorted={sortBy === "prices"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("prices")}>
-              Prix
+              Prix/km
+            </Th>
+            <Th
+              sorted={sortBy === "prices"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("prices")}>
+              Prix/heure
+            </Th>
+            <Th
+              sorted={sortBy === "prices"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("prices")}>
+              Prix/minute
             </Th>
           </tr>
         </thead>

@@ -20,9 +20,9 @@ const SettingsPage = () => {
   const [checked, setChecked] = useState(true);
   const dispatch = useDispatch<any>();
   const [windowSize, setWindowSize] = useState([
-		window.innerWidth,
-		window.innerHeight,
-	]);
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -57,7 +57,7 @@ const SettingsPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
       <PageLayoutTemplate>
         {settings.isLoading ? (
           <Flex
@@ -74,7 +74,9 @@ const SettingsPage = () => {
               <>
                 <Text>
                   Course taxée par :{" "}
-                  {settings.items.taxType === "hour" ? "Heure" : "Minute"}
+                  {settings.items.taxType === "hour" && "Heure"}
+                  {settings.items.taxType === "minute" && "Minute"}
+                  {settings.items.taxType === "km" && "KM"}
                 </Text>
                 <Button
                   onClick={() => setEdit(true)}
@@ -116,14 +118,13 @@ const SettingsPage = () => {
                   data={[
                     { value: "hour", label: "Heure" },
                     { value: "minute", label: "Minute" },
+                    { value: "km", label: "KM" },
                   ]}
-                  // value={form.values.taxType}
-                  // defaultValue={settings.items.taxType}
                   onChange={
-                    (event) =>
+                    (event) => {
+                      console.log(event.currentTarget.value)
                       form.setFieldValue("taxType", event.currentTarget.value)
-
-                    // console.log(event.currentTarget.value)
+                    }
                   }
                 />
 
@@ -159,20 +160,6 @@ const SettingsPage = () => {
                 </Flex>
               </form>
             )}
-            {/* <Switch
-              checked={checked}
-              onLabel="Heure"
-              offLabel="Minute"
-              onChange={async (event) => {
-                setChecked(event.currentTarget.checked);
-
-                handleChange();
-
-                await dispatch(updateTaxType(value));
-                await dispatch(getSettings());
-              }}
-              size="xl"
-            /> */}
             <ToastContainer />
           </Flex>
         )}
