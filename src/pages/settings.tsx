@@ -108,21 +108,20 @@ const SettingsPage = () => {
                       error:
                         "Une erreur s'est produite lors de la modification",
                     },
-                  );
-
-                  window.location.reload();
+                  ); 
+                 window.location.reload();
                 })}>
                 <NativeSelect
                   label="Modifier la tarification : "
                   placeholder="Sélectionner le type"
                   data={[
-                    { value: "hour", label: "Heure" },
+                    { value: "--", label: "--" },
                     { value: "minute", label: "Minute" },
                     { value: "km", label: "KM" },
+                    { value: "hour", label: "Heure" },
                   ]}
                   onChange={
                     (event) => {
-                      console.log(event.currentTarget.value)
                       form.setFieldValue("taxType", event.currentTarget.value)
                     }
                   }
