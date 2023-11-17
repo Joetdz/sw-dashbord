@@ -42,3 +42,15 @@ export const deactivateDriver = createAsyncThunk("drivers/deactivateDriver", asy
         }
     }).then((response) => response.data)
 })
+
+export const editDriverPassword = createAsyncThunk("drivers/editDriverPassword", async (params: { id: string | undefined, content: any }) => {
+    return axios({
+        method: "PUT",
+        data: params.content,
+        url: `${process.env.REACT_APP_API_URL}drivers/reset-password/${params.id}`,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+        .then((response) => response.data)
+})

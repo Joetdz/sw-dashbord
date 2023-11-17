@@ -1,5 +1,5 @@
 import { createSlice, } from "@reduxjs/toolkit";
-import { getDrivers, activateDriver, deactivateDriver, getSingleDriver } from "./thunk";
+import { getDrivers, activateDriver, deactivateDriver, getSingleDriver, editDriverPassword } from "./thunk";
 
 
 
@@ -131,6 +131,30 @@ export const driverSlice = createSlice({
                 return {
                     ...state,
                     isLoading: false,
+                    hasError: true
+                }
+            })
+
+            .addCase(editDriverPassword.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(editDriverPassword.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: false
+                }
+            })
+
+            .addCase(editDriverPassword.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
                     hasError: true
                 }
             })
