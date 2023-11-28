@@ -24,19 +24,19 @@ import Header from "../components/Header";
 const SingleCarPage = () => {
   const { id } = useParams<{ id?: string }>();
   const [windowSize, setWindowSize] = useState([
-		window.innerWidth,
-		window.innerHeight,
-	]);
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const handleWindowResize = () => {
       setWindowSize([window.innerWidth, window.innerHeight]);
     };
 
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
 
@@ -44,7 +44,7 @@ const SingleCarPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(getSingleCar(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const cars = useSelector((state: any) => state.cars);
 
@@ -56,16 +56,16 @@ const SingleCarPage = () => {
       prices: {
         km: {
           price: 0,
-          currency: "CDF",
+          currency: "",
         },
         hour: {
           price: 0,
-          currency: "USD",
+          currency: "",
         },
 
         minute: {
           price: 0,
-          currency: "CDF",
+          currency: "",
         },
       },
     },
@@ -94,7 +94,7 @@ const SingleCarPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
 
       <PageLayoutTemplate>
         {cars.isLoading ? (
@@ -116,7 +116,8 @@ const SingleCarPage = () => {
                   <Flex
                     direction="row"
                     sx={{ width: "50%" }}
-                    justify="space-between">
+                    justify="space-between"
+                  >
                     <Stack>
                       <Title order={5}>Prix / km</Title>
 
@@ -185,7 +186,8 @@ const SingleCarPage = () => {
 
                   <Button
                     onClick={() => setEdit(true)}
-                    style={{ background: "#0C3966", borderRadius: "25px" }}>
+                    style={{ background: "#0C3966", borderRadius: "25px" }}
+                  >
                     Modifier
                   </Button>
                 </Flex>
@@ -211,7 +213,10 @@ const SingleCarPage = () => {
                                     ? cars.singleCarDetails.prices.km.price
                                     : form.values.prices.km.price,
 
-                                currency: form.values.prices.km.currency,
+                                currency:
+                                  form.values.prices.km.currency === ""
+                                    ? cars.singleCarDetails.prices.km.currency
+                                    : form.values.prices.km.currency,
                               },
                               hour: {
                                 price:
@@ -219,7 +224,10 @@ const SingleCarPage = () => {
                                     ? cars.singleCarDetails.prices.hour.price
                                     : form.values.prices.hour.price,
 
-                                currency: form.values.prices.hour.currency,
+                                currency:
+                                  form.values.prices.hour.currency === ""
+                                    ? cars.singleCarDetails.prices.hour.currency
+                                    : form.values.prices.hour.currency,
                               },
                               minute: {
                                 price:
@@ -227,22 +235,32 @@ const SingleCarPage = () => {
                                     ? cars.singleCarDetails.prices.minute.price
                                     : form.values.prices.minute.price,
 
-                                currency: form.values.prices.minute.currency,
+                                currency:
+                                  form.values.prices.minute.currency === ""
+                                    ? cars.singleCarDetails.prices.minute
+                                        .currency
+                                    : form.values.prices.minute.currency,
                               },
                             },
                           },
-                        }),
+                        })
                       ),
                       {
                         pending: "Modification",
                         success: "Modification réussie avec succès",
                         error:
                           "Une erreur s'est produite lors de la modification",
-                      },
+                      }
                     );
                     navigate("/cars", { replace: true });
-                    window.location.reload();
-                  })}>
+                    // window.location.reload();
+                    console.log({
+                      kmCurrency: form.values.prices.km.currency,
+                      hourCurrencey: form.values.prices.hour.currency,
+                      minutesCurrencey: form.values.prices.minute.currency,
+                    });
+                  })}
+                >
                   <Stack>
                     <Title order={3}>Modèle</Title>
 
@@ -253,14 +271,15 @@ const SingleCarPage = () => {
                       }
                       required
                       withAsterisk
-                      // value={form.values.model}
+                      value={form.values.model}
                     />
                   </Stack>
                   <Flex direction="column">
                     <Flex
                       direction="row"
                       sx={{ width: "50%", margin: "2em 0 .5em" }}
-                      justify="space-between">
+                      justify="space-between"
+                    >
                       <Stack>
                         <Title order={5}>Prix / km</Title>
 
@@ -274,28 +293,26 @@ const SingleCarPage = () => {
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
                                   /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ",",
+                                  ","
                                 )
                               : ""
                           }
                           // value={form.values.prices.km.price}
-                          required
-                          withAsterisk
+                          // required
+                          // withAsterisk
                         />
                       </Stack>
                       <Stack>
                         <Title order={5}>Dévise</Title>
 
                         <NativeSelect
-                          data={["CDF", "USD"]}
+                          data={["--", "CDF", "USD"]}
                           onChange={(event) =>
                             form.setFieldValue(
                               "prices.km.currency",
-                              event.currentTarget.value,
+                              event.currentTarget.value
                             )
                           }
-                          defaultValue="CDF"
-                          // value={form.values.prices.km.currency}
                           required
                           withAsterisk
                         />
@@ -303,7 +320,8 @@ const SingleCarPage = () => {
                     </Flex>
                     <Flex
                       sx={{ width: "50%", margin: "1em 0 .5em" }}
-                      justify="space-between">
+                      justify="space-between"
+                    >
                       <Stack>
                         <Title order={5}>Prix / heure</Title>
 
@@ -317,26 +335,30 @@ const SingleCarPage = () => {
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
                                   /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ",",
+                                  ","
                                 )
                               : ""
                           }
-                          required
-                          withAsterisk
+                          // value={form.values.prices.hour.price}
+                          // required
+                          // withAsterisk
                         />
                       </Stack>
                       <Stack>
                         <Title order={5}>Dévise</Title>
 
                         <NativeSelect
-                          data={["CDF", "USD"]}
+                          data={["--", "CDF", "USD"]}
                           onChange={(event) =>
                             form.setFieldValue(
                               "prices.hour.currency",
-                              event.currentTarget.value,
+                              event.currentTarget.value
                             )
                           }
-                          defaultValue="CDF"
+                          // value={form.values.prices.hour.currency}
+
+                          // value={cars.singleCarDetails.prices.hour.currency}
+                          defaultValue="--"
                           required
                           withAsterisk
                         />
@@ -344,7 +366,8 @@ const SingleCarPage = () => {
                     </Flex>
                     <Flex
                       sx={{ width: "50%", margin: "1em 0 .5em" }}
-                      justify="space-between">
+                      justify="space-between"
+                    >
                       <Stack>
                         <Title order={5}>Prix / minute</Title>
 
@@ -358,27 +381,27 @@ const SingleCarPage = () => {
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
                                   /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ",",
+                                  ","
                                 )
                               : ""
                           }
                           // value={form.values.prices.minute.price}
-                          required
-                          withAsterisk
+                          // required
+                          // withAsterisk
                         />
                       </Stack>
                       <Stack>
                         <Title order={5}>Dévise</Title>
 
                         <NativeSelect
-                          data={["CDF", "USD"]}
+                          data={["--", "CDF", "USD"]}
                           onChange={(event) =>
                             form.setFieldValue(
                               "prices.minute.currency",
-                              event.currentTarget.value,
+                              event.currentTarget.value
                             )
                           }
-                          defaultValue="CDF"
+                          defaultValue="--"
                           required
                           withAsterisk
                         />
@@ -401,7 +424,8 @@ const SingleCarPage = () => {
                             background: "#F9A507",
                           },
                         },
-                      ]}>
+                      ]}
+                    >
                       Annuler
                     </Button>
                     <Button
@@ -413,7 +437,8 @@ const SingleCarPage = () => {
                             background: "#F9A507",
                           },
                         },
-                      ]}>
+                      ]}
+                    >
                       Enregistrer
                     </Button>
                   </Flex>
