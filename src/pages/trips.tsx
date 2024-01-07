@@ -11,6 +11,7 @@ import { NavbarSimple } from "../components/SideBar";
 import { getPassengers } from "../store/features/passengers/thunk";
 import { getTrips } from "../store/features/trips/thunk";
 import { DataTable } from "mantine-datatable";
+import { useNavigate } from 'react-router-dom';
 import Header from "../components/Header";
 
 const PAGE_SIZES = [10, 15, 20];
@@ -18,9 +19,9 @@ const PAGE_SIZES = [10, 15, 20];
 const TripsPage = () => {
   const [pageSize, setPageSize] = useState(PAGE_SIZES[1]);
   const [windowSize, setWindowSize] = useState([
-		window.innerWidth,
-		window.innerHeight,
-	]);
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -57,17 +58,14 @@ const TripsPage = () => {
     setRecords(trips.items.slice(from, to));
   }, [page, pageSize]);
 
+  const navigate = useNavigate();
 
 
-  console.log(trips.items.filter((trips: any) => trips.pepo));
 
-  
-  
-   
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
       <PageLayoutTemplate>
         {trips.isLoading ? (
           <Flex
@@ -83,7 +81,42 @@ const TripsPage = () => {
             {trips.items.length <= 0 ? (
               <Text>Une erreur s'est produite lors de la requête</Text>
             ) : (
-              <TripsTable data={trips.items} />
+
+              <Flex direction="column"
+                sx={{
+                  width: "100%",
+                  left: "300px",
+                  margin: "1em auto",
+                  height: "100%",
+                }}>
+                <Flex>
+                  <Group position="center">
+                    <Button
+
+                      onClick={(event) => {
+                        event.preventDefault();
+                        navigate(`/trips/new-trip`, { replace: false });
+                      }}
+
+                      sx={[
+                        {
+                          background: "#0C3966",
+                          borderRadius: "25px",
+                          marginBottom: "20px",
+                        },
+                        {
+                          "&:hover": {
+                            background: "#01101E",
+                          },
+                        },
+                      ]}>
+                      Créer une course instantané
+                    </Button>
+                  </Group>
+                </Flex>
+                <TripsTable data={trips.items} />
+
+              </Flex>
 
               // <DataTable
               //   withBorder
