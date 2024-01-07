@@ -8,6 +8,8 @@ import {
 } from '@react-google-maps/api';
 import { Flex, Loader, Box, Stack, TextInput, Button, Group, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLocation } from '../../store/features/trips/slice';
 
 //const center = { lat: -4.317627, lng: 15.321454 }
 
@@ -26,6 +28,8 @@ const Maps = () => {
         lat: 0,
         lng: 0,
     });
+
+    const dispatch = useDispatch<any>();
 
     const originRef = useRef<HTMLInputElement>(null);
 
@@ -63,6 +67,8 @@ const Maps = () => {
         originRef.current.value = ''
         destiantionRef.current.value = ''
     }
+
+    //console.log({ map, center, directionsResponse })
     return (
         <Flex
             direction='column'
@@ -76,16 +82,18 @@ const Maps = () => {
                     zoom={15}
                     mapContainerStyle={{ width: '100%', height: '100%' }}
                     options={{
-                        zoomControl: false,
+                        zoomControl: true,
                         streetViewControl: false,
                         mapTypeControl: false,
                         fullscreenControl: false,
                     }}
-                    onLoad={map => setMap(map)}
+                    onLoad={map => {
+                        setMap(map)
+                    }}
                     onIdle={() => {
-                        map && setCenter(map?.getCenter()!.toJSON())
-                    }
-                    }
+                        map && setCenter(map?.getCenter()!.toJSON());
+                        map && dispatch(setLocation(map?.getCenter()!.toJSON()))
+                    }}
                 >
                     <Marker position={center} />
                     {directionsResponse && (
@@ -94,9 +102,9 @@ const Maps = () => {
                 </GoogleMap>
             </Box>
             <Box
-                sx={{ borderRadius: '10', background: 'white', zIndex: 1 }}
+                sx={{ borderRadius: '10', background: 'white', zIndex: 1, width: '100%', padding: "20px" }}
             >
-                <Flex justify='space-between'>
+                <Flex direction="column" justify='space-between'>
                     <Box>
                         <Autocomplete>
                             <TextInput type='text' placeholder='Point de départ' ref={originRef} />

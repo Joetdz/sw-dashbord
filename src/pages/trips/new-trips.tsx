@@ -25,8 +25,32 @@ const NewTrip = () => {
     ]);
     const form = useForm({
         initialValues: {
-            passenger: "",
-            phoneNumber: 0,
+            passenger: {
+                name: "",
+                phone: ""
+            },
+            locations: {
+                from: {
+                    name: "",
+                    latitude: 0,
+                    longitude: 0,
+                },
+                to: {
+                    name: "",
+                    latitude: 0,
+                    longitude: 0,
+                },
+                distance: 0
+            },
+            car: {
+                model: "",
+                uid: ""
+            },
+            driver: {
+                name: "",
+                uid: "",
+                phone: ""
+            }
         },
     });
 
@@ -45,14 +69,22 @@ const NewTrip = () => {
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         };
-
-
     }, [dispatch, pageSize]);
 
     const [page, setPage] = useState(1);
 
     const drivers = useSelector((state: any) => state.drivers);
-    const names: string[] = drivers.items.map((driver: any) => driver.name);
+
+    const tripsLocation = useSelector((state: any) => state.trips.center);
+
+    //console.log({ tripsLocation })
+
+    const items: { label: string, value: string, car: string }[] = drivers.items.map((driver: any) => ({ label: driver.name, value: driver.uid }));
+
+    // const labelsAndValues: { label: string, value: string }[] = drivers.map(driver => ({ label: driver.label, value: driver.value }));
+
+    console.log(
+        items)
 
     return (
         <div style={{ display: "flex" }}>
@@ -67,9 +99,9 @@ const NewTrip = () => {
                             label="Nom du passager"
                             withAsterisk
                             required
-                            value={form.values.passenger}
+                            value={form.values.passenger.name}
                             onChange={(event) =>
-                                form.setFieldValue("passenger", event.currentTarget.value)
+                                form.setFieldValue("passenger.name", event.currentTarget.value)
                             }
                         />
                         <TextInput
@@ -80,20 +112,22 @@ const NewTrip = () => {
                             rightSectionWidth={92}
                             required
                             onChange={(event) =>
-                                form.setFieldValue("passenger", event.currentTarget.value)
+                                form.setFieldValue("passenger.phone", event.currentTarget.value)
                             }
                         />
 
                         <Select
                             label="Chauffeur"
                             placeholder="Assigner un chauffeur"
-                            data={drivers && names}
+                            data={drivers.items && items}
                             sx={{ color: "black" }}
                             searchable
                             searchValue={searchValue}
                             onSearchChange={setSearchValue}
+                            value={form.values.driver.uid}
+                            onChange={(option: string) => form.setFieldValue("driver.uid", option)}
                         />
-                        <Flex sx={{ height: '100vh' }}>
+                        <Flex sx={{ height: '100vh', marginTop: "25px" }}>
 
                             <Maps />
                         </Flex>

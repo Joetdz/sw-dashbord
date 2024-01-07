@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTrips } from "./thunk";
+import { getTrips, createTrip } from "./thunk";
 
 
 
@@ -8,8 +8,14 @@ interface TripState {
     isUpdating: boolean,
     new: string,
     isLoading: boolean,
+    isSaving: boolean,
     items: string[],
-    singleSettingDetails: string
+    singleSettingDetails: string;
+    center: {
+        latitude: number;
+        longitude: number;
+    }
+    uid: string;
 }
 
 
@@ -20,13 +26,24 @@ const initialState = {
     new: "",
     items: [],
     isLoading: false,
-    singleSettingDetails: ""
+    isSaving: false,
+    singleSettingDetails: "",
+    center: {
+        latitude: 0,
+        longitude: 0
+    },
+    uid: "",
+
 } as TripState;
 
 export const tripSlice = createSlice({
     name: "trips",
     initialState,
-    reducers: {},
+    reducers: {
+        setLocation(state, action) {
+            void (state.center = action.payload)
+        },
+    },
     extraReducers: (builder) => {
         builder
 
@@ -54,7 +71,36 @@ export const tripSlice = createSlice({
                     hasError: true
                 }
             })
+
+            .addCase(createTrip.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: true,
+                    hasError: false,
+                }
+            })
+
+            .addCase(createTrip.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: false,
+                    hasError: false,
+                    new: action.payload
+                }
+            })
+
+            .addCase(createTrip.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: false,
+                    hasError: true
+                }
+            })
     }
 
 })
+
+
+export const { setLocation } = tripSlice.actions;
+
 export default tripSlice
