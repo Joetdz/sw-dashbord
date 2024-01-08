@@ -11,10 +11,19 @@ interface TripState {
     isSaving: boolean,
     items: string[],
     singleSettingDetails: string;
-    center: {
-        latitude: number;
-        longitude: number;
-    }
+    locations: {
+        from: {
+            name: string,
+            latitude: number,
+            longitude: number,
+        },
+        to: {
+            name: string,
+            latitude: number,
+            longitude: number,
+        },
+        distance: number
+    },
     uid: string;
 }
 
@@ -28,9 +37,18 @@ const initialState = {
     isLoading: false,
     isSaving: false,
     singleSettingDetails: "",
-    center: {
-        latitude: 0,
-        longitude: 0
+    locations: {
+        from: {
+            name: "",
+            latitude: 0,
+            longitude: 0,
+        },
+        to: {
+            name: "",
+            latitude: 0,
+            longitude: 0,
+        },
+        distance: 0
     },
     uid: "",
 
@@ -41,7 +59,7 @@ export const tripSlice = createSlice({
     initialState,
     reducers: {
         setLocation(state, action) {
-            void (state.center = action.payload)
+            void (state.locations = action.payload)
         },
     },
     extraReducers: (builder) => {

@@ -10,17 +10,17 @@ type Content = {
     locations: {
         from: {
             name: string,
-            latitude: 0,
-            longitude: 0,
+            latitude: number,
+            longitude: number,
         },
         to: {
             name: string,
-            latitude: 0,
-            longitude: 0,
+            latitude: number,
+            longitude: number,
         },
-        distance: 0
+        distance: number
     },
-    car?: {
+    car: {
         model: string,
         uid: string
     },

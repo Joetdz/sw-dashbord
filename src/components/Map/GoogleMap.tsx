@@ -22,12 +22,15 @@ const Maps = () => {
 
     const [map, setMap] = useState<google.maps.Map>()
     const [directionsResponse, setDirectionsResponse] = useState(null)
-    const [distance, setDistance] = useState('')
+    const [distance, setDistance] = useState<number>(0.00);
     const [duration, setDuration] = useState('')
     const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
         lat: 0,
         lng: 0,
     });
+
+    let originLocation: { lat: string, lng: string }, destinationLocation: { lat: string, lng: string };
+
 
     const dispatch = useDispatch<any>();
 
@@ -46,6 +49,48 @@ const Maps = () => {
 
     async function calculateRoute() {
         if (!originRef.current || !destiantionRef.current) return
+
+        // Use PlacesService to fetch details of the origin and destination
+        const placesService = new google.maps.places.PlacesService(map as google.maps.Map);
+
+        // Fetch details for the origin
+        placesService.findPlaceFromQuery(
+            {
+                query: originRef.current?.value,
+                fields: ['geometry'],
+            },
+            (results: any, status) => {
+                if (!results && status !== google.maps.places.PlacesServiceStatus.OK) return
+
+                //const originLocation = results[0] && results[0].geometry.location.toJSON();
+                //const originLocation = results;
+                //console.log('Origin Location:', originLocation);
+                if (status === google.maps.places.PlacesServiceStatus.OK && results && results[0]) {
+                    originLocation = results[0].geometry.location.toJSON();
+                    //console.log('Origin Location:', originLocation);
+                } else {
+                    console.error('Error fetching origin details:', status);
+                }
+            }
+        );
+
+        // Fetch details for the destination
+        placesService.findPlaceFromQuery(
+            {
+                query: destiantionRef.current.value,
+                fields: ['geometry'],
+            },
+            (results: any, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                    destinationLocation = results[0].geometry.location.toJSON();
+                    // const destinationLocation = results;
+                    //console.log('Destination Location:', destinationLocation);
+                } else {
+                    console.error('Error fetching destination details:', status);
+                }
+            }
+        );
+
         // eslint-disable-next-line no-undef
         const directionsService = new google.maps.DirectionsService()
         const results: any = await directionsService.route({
@@ -57,18 +102,36 @@ const Maps = () => {
         setDirectionsResponse(results)
         setDistance(results.routes[0].legs[0].distance.text)
         setDuration(results.routes[0].legs[0].duration.text)
+        const numericDistance = parseFloat(results.routes[0].legs[0].distance.text);
+        console.log(numericDistance)
+
+        dispatch(setLocation(
+            {
+                from: {
+                    name: results.request.origin.query,
+                    latitude: originLocation.lat,
+                    longitude: originLocation.lng,
+                },
+                to: {
+                    name: results.request.destination.query,
+                    latitude: destinationLocation.lat,
+                    longitude: destinationLocation.lng,
+                },
+                distance: numericDistance
+            }
+        ))
     }
 
     function clearRoute() {
         if (!originRef.current || !destiantionRef.current) return
         setDirectionsResponse(null)
-        setDistance('')
+        setDistance(0.00)
         setDuration('')
         originRef.current.value = ''
         destiantionRef.current.value = ''
     }
 
-    //console.log({ map, center, directionsResponse })
+
     return (
         <Flex
             direction='column'
@@ -90,10 +153,11 @@ const Maps = () => {
                     onLoad={map => {
                         setMap(map)
                     }}
-                    onIdle={() => {
-                        map && setCenter(map?.getCenter()!.toJSON());
-                        map && dispatch(setLocation(map?.getCenter()!.toJSON()))
-                    }}
+                //onIdle={() => {
+                //map && setCenter(map?.getCenter()!.toJSON());
+                //map && dispatch(setLocation(map?.getCenter()!.toJSON()))
+                // }}
+
                 >
                     <Marker position={center} />
                     {directionsResponse && (
@@ -129,15 +193,6 @@ const Maps = () => {
                 <Stack spacing={4} mt={4} justify='space-between'>
                     <Text>Distance : {distance} </Text>
                     <Text>Temps estimé : {duration} </Text>
-                    {/*<IconButton
-                        aria-label='center back'
-                        icon={<FaLocationArrow />}
-                        isRound
-                        onClick={() => {
-                            map.panTo(center)
-                            map.setZoom(15)
-                        }}
-                    />*/}
                 </Stack>
             </Box>
         </Flex>

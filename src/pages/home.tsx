@@ -24,17 +24,17 @@ const HomePage = () => {
 		window.innerHeight,
 	]);
 
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setWindowSize([window.innerWidth, window.innerHeight]);
-    };
+	useEffect(() => {
+		const handleWindowResize = () => {
+			setWindowSize([window.innerWidth, window.innerHeight]);
+		};
 
-    window.addEventListener('resize', handleWindowResize);
+		window.addEventListener('resize', handleWindowResize);
 
-    return () => {
-      window.removeEventListener('resize', handleWindowResize);
-    };
-  }, []);
+		return () => {
+			window.removeEventListener('resize', handleWindowResize);
+		};
+	}, []);
 
 	const status = [
 		{
@@ -91,13 +91,13 @@ const HomePage = () => {
 	// console.log(
 	//   new Date(trips.items.timeStamps.command._seconds * 1000).toLocaleString(),
 	// );
-	// console.log(dayTrips);
+	console.log(dayTrips);
 
 	const passengers = useSelector((state: any) => state.passengers);
 	const drivers = useSelector((state: any) => state.drivers);
 	return (
 		<div style={{ display: 'flex' }}>
-			{windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+			{windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
 			<PageLayoutTemplate>
 				<Text
 					fw={700}
