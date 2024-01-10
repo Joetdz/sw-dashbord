@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Flex, Group, Button, Loader, Select, Text, TextInput, NativeSelect, rem } from "@mantine/core";
+import { Container, Flex, Group, Button, Loader, Select, Text, TextInput, CopyButton, ActionIcon, Tooltip, rem } from "@mantine/core";
 import PageLayoutTemplate from "../../components/PageLayoutTemplate";
 import { useForm } from "@mantine/form";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons-react";
+import {
+    IconLink,
+    IconCheck
+} from "@tabler/icons-react";
 import { NavbarSimple } from "../../components/SideBar";
 import Header from "../../components/Header";
 import { DataTable } from "mantine-datatable";
@@ -26,6 +29,7 @@ const NewTrip = () => {
         window.innerWidth,
         window.innerHeight,
     ]);
+    const [showPopup, setShowPopup] = useState(false);
     const form = useForm({
         initialValues: {
             passenger: {
@@ -91,6 +95,7 @@ const NewTrip = () => {
         <div style={{ display: "flex" }}>
             {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
             <PageLayoutTemplate>
+
                 {
                     trips.isSaving ? (
                         <Flex
@@ -101,6 +106,25 @@ const NewTrip = () => {
                         </Flex>
                     ) : (
                         <Container>
+                            {showPopup && (
+                                // Your popup component or code goes here
+                                <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", padding: "20px", backgroundColor: "white", boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)" }}>
+                                    <td><CopyButton value={`http://localhost:3001/trips/${trips.new.id}`} timeout={2000}>
+                                        {({ copied, copy }) => (
+                                            <Tooltip label={copied ? 'Copié' : 'Copier'} withArrow position="right">
+                                                <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                                                    {copied ? (
+                                                        <IconCheck style={{ width: rem(16) }} />
+                                                    ) : (
+                                                        <IconLink style={{ width: rem(16) }} />
+                                                    )}
+                                                </ActionIcon>
+                                            </Tooltip>
+                                        )}
+                                    </CopyButton></td>
+                                    <Button onClick={() => setShowPopup(false)}>Close</Button>
+                                </div>
+                            )}
                             <form
                                 onSubmit={form.onSubmit(async () => {
                                     await dispatch(createTrip(
@@ -121,8 +145,10 @@ const NewTrip = () => {
                                             }
                                         }
                                     ))
-                                    console.log({ name: form.values.driver.name, phone: form.values.driver.phone, model: form.values.car.model })
 
+                                    setShowPopup(true);
+
+                                    console.log({ newTrip: trips.new, newTripId: trips.new.id })
                                 })}>
                                 <TextInput
                                     placeholder="Nom du passager"
@@ -155,9 +181,9 @@ const NewTrip = () => {
                                     searchValue={searchValue}
                                     onSearchChange={setSearchValue}
                                     value={form.values.driver.uid}
+                                    required
                                     onChange={(option: string) => {
                                         form.setFieldValue("driver.uid", option);
-                                        //console.log(drivers.items.find((item: any) => item.uid === option))
                                         form.setFieldValue("driver.name", drivers.items.find((item: any) => item.uid === option).name)
                                         form.setFieldValue("driver.phone", drivers.items.find((item: any) => item.uid === option).phone)
                                     }}
@@ -172,6 +198,7 @@ const NewTrip = () => {
                                     searchValue={searchCarValue}
                                     onSearchChange={setSearchCarValue}
                                     value={form.values.car.uid}
+                                    required
                                     onChange={(option: string) => {
                                         form.setFieldValue("car.uid", option)
                                         form.setFieldValue("car.model", cars.items.find((item: any) => item.uid === option).model)
@@ -180,12 +207,6 @@ const NewTrip = () => {
                                 <Flex sx={{ height: '100vh', marginTop: "25px" }}>
 
                                     <Maps />
-                                </Flex>
-                                <Flex>
-
-                                </Flex>
-                                <Flex>
-
                                 </Flex>
 
                                 <Button type="submit">Enregistrer</Button>
