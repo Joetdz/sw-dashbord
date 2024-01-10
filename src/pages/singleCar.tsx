@@ -238,7 +238,7 @@ const SingleCarPage = () => {
                                 currency:
                                   form.values.prices.minute.currency === ""
                                     ? cars.singleCarDetails.prices.minute
-                                        .currency
+                                      .currency
                                     : form.values.prices.minute.currency,
                               },
                             },
@@ -281,7 +281,7 @@ const SingleCarPage = () => {
                       justify="space-between"
                     >
                       <Stack>
-                        <Title order={5}>Prix / km</Title>
+                        <Title order={5}>PriroFlexFlexFlexFlexwx / km</Title>
 
                         <NumberInput
                           placeholder={`${cars.singleCarDetails.prices.km.price}`}
@@ -292,14 +292,14 @@ const SingleCarPage = () => {
                           formatter={(value) =>
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
-                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ","
-                                )
+                                /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                ","
+                              )
                               : ""
                           }
-                          // value={form.values.prices.km.price}
-                          // required
-                          // withAsterisk
+                        // value={form.values.prices.km.price}
+                        // required
+                        // withAsterisk
                         />
                       </Stack>
                       <Stack>
@@ -334,14 +334,14 @@ const SingleCarPage = () => {
                           formatter={(value) =>
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
-                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ","
-                                )
+                                /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                ","
+                              )
                               : ""
                           }
-                          // value={form.values.prices.hour.price}
-                          // required
-                          // withAsterisk
+                        // value={form.values.prices.hour.price}
+                        // required
+                        // withAsterisk
                         />
                       </Stack>
                       <Stack>
@@ -380,14 +380,14 @@ const SingleCarPage = () => {
                           formatter={(value) =>
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
-                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ","
-                                )
+                                /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                ","
+                              )
                               : ""
                           }
-                          // value={form.values.prices.minute.price}
-                          // required
-                          // withAsterisk
+                        // value={form.values.prices.minute.price}
+                        // required
+                        // withAsterisk
                         />
                       </Stack>
                       <Stack>

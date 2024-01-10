@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTrips } from "./thunk";
+import { getTrips, createTrip } from "./thunk";
 
 
 
@@ -8,8 +8,23 @@ interface TripState {
     isUpdating: boolean,
     new: string,
     isLoading: boolean,
+    isSaving: boolean,
     items: string[],
-    singleSettingDetails: string
+    singleSettingDetails: string;
+    locations: {
+        from: {
+            name: string,
+            latitude: number,
+            longitude: number,
+        },
+        to: {
+            name: string,
+            latitude: number,
+            longitude: number,
+        },
+        distance: number
+    },
+    uid: string;
 }
 
 
@@ -20,13 +35,33 @@ const initialState = {
     new: "",
     items: [],
     isLoading: false,
-    singleSettingDetails: ""
+    isSaving: false,
+    singleSettingDetails: "",
+    locations: {
+        from: {
+            name: "",
+            latitude: 0,
+            longitude: 0,
+        },
+        to: {
+            name: "",
+            latitude: 0,
+            longitude: 0,
+        },
+        distance: 0
+    },
+    uid: "",
+
 } as TripState;
 
 export const tripSlice = createSlice({
     name: "trips",
     initialState,
-    reducers: {},
+    reducers: {
+        setLocation(state, action) {
+            void (state.locations = action.payload)
+        },
+    },
     extraReducers: (builder) => {
         builder
 
@@ -54,7 +89,36 @@ export const tripSlice = createSlice({
                     hasError: true
                 }
             })
+
+            .addCase(createTrip.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: true,
+                    hasError: false,
+                }
+            })
+
+            .addCase(createTrip.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: false,
+                    hasError: false,
+                    new: action.payload
+                }
+            })
+
+            .addCase(createTrip.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: false,
+                    hasError: true
+                }
+            })
     }
 
 })
+
+
+export const { setLocation } = tripSlice.actions;
+
 export default tripSlice

@@ -10,6 +10,7 @@ import {
   TextInput,
   rem,
   Button,
+  CopyButton, ActionIcon, Tooltip
 } from "@mantine/core";
 import { useDispatch } from "react-redux";
 import {
@@ -23,6 +24,8 @@ import {
   IconChevronDown,
   IconChevronUp,
   IconSearch,
+  IconLink,
+  IconCheck
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
@@ -250,6 +253,19 @@ export function TripsTable({ data }: TableSortProps) {
         </Link> */}
       </td>
       <td>{row.pepo ? "Pepo" : "Express"}</td>
+      <td><CopyButton value={`${process.env.REACT_APP_CHRONO_DOMAIN}/trips/${row.uid}`} timeout={2000}>
+        {({ copied, copy }) => (
+          <Tooltip label={copied ? 'Copié' : 'Copier'} withArrow position="right">
+            <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+              {copied ? (
+                <IconCheck style={{ width: rem(16) }} />
+              ) : (
+                <IconLink style={{ width: rem(16) }} />
+              )}
+            </ActionIcon>
+          </Tooltip>
+        )}
+      </CopyButton></td>
       {/* <td>
         <Button
           onClick={async () => {
@@ -332,6 +348,12 @@ export function TripsTable({ data }: TableSortProps) {
               reversed={reverseSortDirection}
               onSort={() => setSorting("action")}>
               Type de course
+            </Th>
+            <Th
+              sorted={sortBy === "action"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("action")}>
+              Lien de la course
             </Th>
           </tr>
         </thead>

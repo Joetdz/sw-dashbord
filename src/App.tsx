@@ -23,6 +23,7 @@ import UsersPage from "./pages/users";
 import SingleUserPage from "./pages/singleUser";
 import SingleDriver from "./pages/singleDriver";
 import SinglePassenger from "./pages/singlePassenger";
+import NewTrip from "./pages/trips/new-trips";
 import { setAuth } from "./store/features/admins/slice";
 import "./App.css";
 
@@ -90,6 +91,7 @@ function App() {
             <Route path="/cars" element={<CarsPage />} />
             <Route path="/cars/:id" element={<SingleCarPage />} />
             <Route path="/trips" element={<TripsPage />} />
+            <Route path="/trips/new-trip" element={<NewTrip />} />
             <Route path="/passengers" element={<PassengersPage />} />
             <Route path="/passengers/:id" element={<SinglePassenger />} />
             <Route path="/drivers" element={<DriversPage />} />

@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.8",
+    "@googlemaps/react-wrapper": "^1.1.35",
+    "@googlemaps/typescript-guards": "^2.0.3",
     "@mantine/core": "^6.0.10",
     "@mantine/ds": "^6.0.10",
     "@mantine/form": "^6.0.10",
@@ -14,6 +16,7 @@
     "@mantine/prism": "^6.0.10",
     "@mantine/spotlight": "^6.0.10",
     "@mantine/tiptap": "^6.0.10",
+    "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@tabler/icons-react": "^2.17.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -27,6 +30,7 @@
     "@types/react": "^18.2.1",
     "@types/react-dom": "^18.2.2",
     "axios": "^1.4.0",
+    "fast-equals": "^5.0.1",
     "mantine-datatable": "^2.4.17",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -60,5 +64,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/google.maps": "^3.54.10"
   }
 }

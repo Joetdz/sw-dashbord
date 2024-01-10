@@ -9,12 +9,10 @@ interface CarState {
     logging: 'idle' | 'pending' | 'succeeded' | 'failed',
     isLoggedIn: boolean
     isCreating: boolean,
-
     hasError: boolean,
     isUpdating: boolean,
     new: string,
     isLoading: boolean,
-
     items: string[],
     singleCarDetails: string
 }
