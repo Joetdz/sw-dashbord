@@ -12,9 +12,9 @@ import Header from "../components/Header";
 
 const ServicesPage = () => {
   const [windowSize, setWindowSize] = useState([
-		window.innerWidth,
-		window.innerHeight,
-	]);
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -39,7 +39,7 @@ const ServicesPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+      {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
       <PageLayoutTemplate>
         {pepoCars.isLoading ? (
           <Flex

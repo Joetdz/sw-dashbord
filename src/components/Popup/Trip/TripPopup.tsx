@@ -36,7 +36,7 @@ export const TripPopup = ({ title, content, opened, open, close }: Props) => {
                 onClose={close}
                 title={title}
                 centered
-                fullScreen={windowSize[0] <= 700 ? true : isMobile}
+                fullScreen={windowSize[0] <= 768 ? true : isMobile}
                 transitionProps={{ transition: "fade", duration: 200 }}
                 zIndex={99}
             >

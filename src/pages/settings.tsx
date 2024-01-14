@@ -57,7 +57,7 @@ const SettingsPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
+      {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
       <PageLayoutTemplate>
         {settings.isLoading ? (
           <Flex
@@ -108,8 +108,8 @@ const SettingsPage = () => {
                       error:
                         "Une erreur s'est produite lors de la modification",
                     },
-                  ); 
-                 window.location.reload();
+                  );
+                  window.location.reload();
                 })}>
                 <NativeSelect
                   label="Modifier la tarification : "

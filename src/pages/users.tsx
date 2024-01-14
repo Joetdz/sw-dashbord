@@ -44,7 +44,7 @@ const UsersPage = () => {
 		<div style={{ display: 'flex' }}>
 			{!opened ? (
 				<>
-					{windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
+					{windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
 
 					<PageLayoutTemplate>
 						{admins.isLoading ? (

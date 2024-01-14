@@ -94,7 +94,7 @@ const SingleCarPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
+      {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
 
       <PageLayoutTemplate>
         {cars.isLoading ? (

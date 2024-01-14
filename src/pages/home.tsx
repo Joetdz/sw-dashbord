@@ -97,7 +97,7 @@ const HomePage = () => {
 	const drivers = useSelector((state: any) => state.drivers);
 	return (
 		<div style={{ display: 'flex' }}>
-			{windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
+			{windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
 			<PageLayoutTemplate>
 				<Text
 					fw={700}
