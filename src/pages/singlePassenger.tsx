@@ -75,7 +75,7 @@ const SinglePassenger = () => {
   });
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
+      {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
 
       <PageLayoutTemplate>
         {passengers.isLoading ? (
@@ -197,7 +197,7 @@ const SinglePassenger = () => {
                                   password:
                                     form.values.password.length === 0
                                       ? passengers.singlePassengerDetails
-                                          .password
+                                        .password
                                       : form.values.password,
                                 },
                               })

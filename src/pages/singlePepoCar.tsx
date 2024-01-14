@@ -24,9 +24,9 @@ import Header from "../components/Header";
 const PepoCarDetails = () => {
   const { id } = useParams<{ id?: string }>();
   const [windowSize, setWindowSize] = useState([
-		window.innerWidth,
-		window.innerHeight,
-	]);
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -84,7 +84,7 @@ const PepoCarDetails = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+      {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
 
       <PageLayoutTemplate>
         {pepo.isLoading ? (
@@ -162,7 +162,7 @@ const PepoCarDetails = () => {
                       }
                       required
                       withAsterisk
-                      // value={form.values.model}
+                    // value={form.values.model}
                     />
                   </Stack>
                   <Flex direction="column">
@@ -182,9 +182,9 @@ const PepoCarDetails = () => {
                           formatter={(value) =>
                             !Number.isNaN(parseFloat(value))
                               ? `${value}`.replace(
-                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ",",
-                                )
+                                /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                ",",
+                              )
                               : ""
                           }
                           //   value={form.values.price}

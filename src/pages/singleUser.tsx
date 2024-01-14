@@ -25,9 +25,9 @@ import Header from "../components/Header";
 const SingleUserPage = () => {
   const { id } = useParams<{ id?: string }>();
   const [windowSize, setWindowSize] = useState([
-		window.innerWidth,
-		window.innerHeight,
-	]);
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -72,7 +72,7 @@ const SingleUserPage = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      {windowSize[0] <= 700 ? <Header /> : <NavbarSimple/>}
+      {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
 
       <PageLayoutTemplate>
         {users.isLoading ? (
@@ -258,7 +258,7 @@ const SingleUserPage = () => {
                             form.errors.password &&
                             "Password should include at least 6 characters"
                           }
-                          //   sx={{ width: "100%" }}
+                        //   sx={{ width: "100%" }}
                         />
                       </Stack>
                       <Stack>
@@ -277,7 +277,7 @@ const SingleUserPage = () => {
                             form.errors.password &&
                             "Password should include at least 6 characters"
                           }
-                          //   radius="md"
+                        //   radius="md"
                         />
                       </Stack>
                     </Flex>

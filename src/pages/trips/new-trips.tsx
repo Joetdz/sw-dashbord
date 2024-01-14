@@ -90,10 +90,9 @@ const NewTrip = () => {
     const items: { label: string, value: string, car: string }[] = drivers.items.map((driver: any) => ({ label: driver.name, value: driver.uid }));
     const carsList: { label: string, value: string }[] = cars.items.map((car: any) => ({ label: car.model, value: car.uid }));
 
-    //console.log(tripsLocation);
     return (
         <div style={{ display: "flex" }}>
-            {windowSize[0] <= 700 ? <Header /> : <NavbarSimple />}
+            {windowSize[0] <= 768 ? <Header /> : <NavbarSimple />}
             <PageLayoutTemplate>
 
                 {

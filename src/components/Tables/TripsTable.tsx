@@ -12,6 +12,7 @@ import {
   Button,
   CopyButton, ActionIcon, Tooltip
 } from "@mantine/core";
+import { DatePicker, DatePickerInput } from '@mantine/dates';
 import { useDispatch } from "react-redux";
 import {
   activateDriver,
@@ -23,11 +24,13 @@ import {
   IconSelector,
   IconChevronDown,
   IconChevronUp,
-  IconSearch,
+  //IconSearch,
   IconLink,
   IconCheck
 } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import { TripDataType } from "../../lib/types";
+
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -53,57 +56,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface RowData {
-  uid: string;
-
-  pepo: boolean;
-  canceled: boolean;
-  email: string;
-  action: any;
-  car: {
-    uid: string;
-    model: string;
-  };
-  passenger: {
-    uid: string;
-    phone: number;
-    name: string;
-  };
-  driver: {
-    uid: string;
-    phone: number;
-    name: string;
-  };
-
-  taxType: string;
-  locations: {
-    distance: number;
-    from: {
-      latitude: number;
-      name: string;
-      alias: null;
-      longitude: number;
-    };
-    to: {
-      latitude: number;
-      name: string;
-      alias: null;
-      longitude: number;
-    };
-  };
-  timeStamps: {
-    command: {
-      _seconds: any;
-    };
-
-    assignedToADriver: Date;
-    passengerFound: Date;
-    end: Date;
-  };
-}
 
 interface TableSortProps {
-  data: RowData[];
+  data: TripDataType[];
 }
 
 interface ThProps {
@@ -136,7 +91,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
   );
 }
 
-function filterData(data: RowData[], search: string) {
+function filterData(data: TripDataType[], search: string) {
   const query = search.toLowerCase().trim();
   return data.filter((item) =>
     keys(data[0]).some((key) =>
@@ -145,72 +100,96 @@ function filterData(data: RowData[], search: string) {
   );
 }
 
-function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string },
-) {
-  const { sortBy } = payload;
 
-  if (!sortBy) {
-    return filterData(data, payload.search);
-  }
-
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return (`${b[sortBy]}` as string).localeCompare(
-          `${a[sortBy]}` as string,
-        );
-      }
-      return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
-    }),
-    payload.search,
-  );
-}
+const ROWS_PER_PAGE = 10;
 
 export function TripsTable({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
+  const [sortBy, setSortBy] = useState<keyof TripDataType | null>(null);
+  // const [sortBy, setSortBy] = useState<'timeStamps.command' | null>('timeStamps.command');
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState<Date | null | undefined>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const setSorting = (field: keyof RowData) => {
+
+  function filterByDate(data: TripDataType[], selectedDateRange: Date | null | undefined): TripDataType[] {
+    if (!selectedDateRange) {
+      return data;
+    }
+
+    return data.filter((item) => {
+      const timestamp = new Date(item.timeStamps.command._seconds * 1000);
+      return timestamp.toDateString() === selectedDateRange.toDateString();
+    });
+  }
+
+  function sortData(
+    data: TripDataType[],
+    payload: { sortBy: keyof TripDataType | null; reversed: boolean; selectedDateRange: Date | null | undefined },
+  ) {
+    const { sortBy, selectedDateRange } = payload;
+
+    let filteredData = filterByDate(data, selectedDateRange);
+
+    if (!sortBy) {
+      return filteredData;
+    }
+
+    if (!selectedDateRange) {
+      console.log({ selectedDateRange })
+      return data.sort((a, b) => {
+        console.log(a.timeStamps.command._seconds - b.timeStamps.command._seconds);
+        return a.timeStamps.command._seconds - b.timeStamps.command._seconds;
+      });
+    }
+
+    return filteredData.sort((a, b) => {
+      if (payload.reversed) {
+        return (`${b[sortBy]}` as string).localeCompare(`${a[sortBy]}` as string);
+      }
+      return a.timeStamps.command._seconds - b.timeStamps.command._seconds;
+    });
+  }
+
+
+  const setSorting = (field: keyof TripDataType | null) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search }));
+
+    if (field === 'timeStamps') {
+      setSortedData(sortData(data, { sortBy: 'timeStamps', reversed, selectedDateRange }));
+    } else {
+      setSortedData(sortData(data, { sortBy: field, reversed, selectedDateRange }));
+    }
+    setSortedData(sortData(data, { sortBy: field, reversed, selectedDateRange }));
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
+  const handleSearchChange = (selectedDateRange: Date | null | undefined) => {
 
-    setSearch(value);
     setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value }),
+      sortData(data, { sortBy: 'timeStamps', reversed: reverseSortDirection, selectedDateRange }),
     );
+
+    setCurrentPage(1);
   };
 
-  const dispatch = useDispatch<any>();
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
         {row.locations.from.name}
-        {/* <Link to={`/trips/${row.uid}`}>
-          
-        </Link> */}
       </td>
       <td>
         {row.locations.to.name}
-        {/* <Link to={`/trips/${row.uid}`}>
-        
-        </Link> */}
       </td>
       <td>
         <span>
           {new Date(row.timeStamps.command._seconds * 1000).toLocaleString()}
-
-          {/* {new Date(row.timeStamps.command._seconds * 1000).toLocaleString()} */}
         </span>
       </td>
       <td>
@@ -239,18 +218,13 @@ export function TripsTable({ data }: TableSortProps) {
         </span>
       </td>
       <td>
-        {/* <Link to={`/passengers/${row.uid}`}>
-        </Link> */}
         {row.passenger && row.passenger.name}
       </td>
       <td>
-        {/* <Link to={`/drivers/${row.uid}`}></Link> */}
         {row.driver && row.driver.name}
       </td>
       <td>
         {row.car && row.car.model}
-        {/* <Link to={row.pepo ? `/pepo/cars/${row.uid}` : `/cars/${row.uid}`}>
-        </Link> */}
       </td>
       <td>{row.pepo ? "Pepo" : "Express"}</td>
       <td><CopyButton value={`${process.env.REACT_APP_CHRONO_DOMAIN}/trips/${row.uid}`} timeout={2000}>
@@ -266,111 +240,150 @@ export function TripsTable({ data }: TableSortProps) {
           </Tooltip>
         )}
       </CopyButton></td>
-      {/* <td>
-        <Button
-          onClick={async () => {
-            await dispatch(deactivateDriver(row.uid));
-            await dispatch(getDrivers());
-          }}
-          sx={{
-            background: "#F31D1D",
-            borderRadius: "25px",
-            fontSize: ".8em",
-          }}>
-          Voir les détails
-        </Button>
-      </td> */}
     </tr>
   ));
 
+  const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+  const endIndex = startIndex + ROWS_PER_PAGE;
+  const paginatedRows = rows.slice(startIndex, endIndex);
+
   return (
-    <ScrollArea>
-      {/* <TextInput
-        placeholder="Rechercher ici"
-        mb="md"
-        icon={<IconSearch size="0.9rem" stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
-      /> */}
-      <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        miw={1400}
-        sx={{ tableLayout: "fixed" }}>
-        <thead>
-          <tr>
-            <Th
-              sorted={sortBy === "locations"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("locations")}>
-              Départ
-            </Th>
-            <Th
-              sorted={sortBy === "locations"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("locations")}>
-              Destination
-            </Th>
-            <Th
-              sorted={sortBy === "timeStamps"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("timeStamps")}>
-              Date
-            </Th>
-            <Th
-              sorted={sortBy === "timeStamps"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("timeStamps")}>
-              Etat de la course
-            </Th>
-            <Th
-              sorted={sortBy === "passenger"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("passenger")}>
-              Passager
-            </Th>
-            <Th
-              sorted={sortBy === "driver"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("driver")}>
-              Chauffeur
-            </Th>
+    <>
+      <DatePickerInput
+        label="Sélectionnez une date"
+        placeholder="Sélectionnez une date"
+        value={selectedDateRange}
+        onChange={(event: any) => {
 
-            <Th
-              sorted={sortBy === "car"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("car")}>
-              Véhicule utilisé
-            </Th>
+          setSelectedDateRange(event)
+          handleSearchChange(event)
+        }}
+        allowDeselect
+        valueFormat="DD/MM/YYYY"
+      />
+      <ScrollArea>
 
-            <Th
-              sorted={sortBy === "action"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("action")}>
-              Type de course
-            </Th>
-            <Th
-              sorted={sortBy === "action"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("action")}>
-              Lien de la course
-            </Th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.length > 0 ? (
-            rows
-          ) : (
+
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={1400}
+          sx={{ tableLayout: "fixed" }}>
+          <thead>
             <tr>
-              <td colSpan={Object.keys(data[0]).length}>
-                <Text weight={500} align="center">
-                  Aucun résultat trouvé
-                </Text>
-              </td>
+              <Th
+                sorted={sortBy === "locations"}
+                //sorted={sortBy === 'timeStamps.command'}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("locations")}>
+                Départ
+              </Th>
+              <Th
+                sorted={sortBy === "locations"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("locations")}>
+                Destination
+              </Th>
+              <Th
+                sorted={sortBy === "timeStamps"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("timeStamps")}>
+                Date
+              </Th>
+              <Th
+                sorted={sortBy === "timeStamps"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("timeStamps")}>
+                Etat de la course
+              </Th>
+              <Th
+                sorted={sortBy === "passenger"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("passenger")}>
+                Passager
+              </Th>
+              <Th
+                sorted={sortBy === "driver"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("driver")}>
+                Chauffeur
+              </Th>
+
+              <Th
+                sorted={sortBy === "car"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("car")}>
+                Véhicule utilisé
+              </Th>
+
+              <Th
+                sorted={sortBy === "action"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("action")}>
+                Type de course
+              </Th>
+              <Th
+                sorted={sortBy === "action"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("action")}>
+                Lien de la course
+              </Th>
             </tr>
-          )}
-        </tbody>
-      </Table>
-    </ScrollArea>
+          </thead>
+          <tbody>
+
+            {paginatedRows.length > 0 ? (
+              paginatedRows
+            ) : (
+              <tr>
+                <td colSpan={Object.keys(data[0]).length}>
+                  <Text weight={500} align="center">
+                    Aucun résultat trouvé
+                  </Text>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+
+        <Group position="left">
+          <Button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            sx={[
+              {
+                background: "#0C3966",
+                borderRadius: "25px",
+                marginBottom: "20px",
+              },
+              {
+                "&:hover": {
+                  background: "#01101E",
+                },
+              },
+            ]}>
+            Page précédente
+          </Button>
+          <span>{`Page ${currentPage}`}</span>
+          <Button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={endIndex >= rows.length}
+            sx={[
+              {
+                background: "#0C3966",
+                borderRadius: "25px",
+                marginBottom: "20px",
+              },
+              {
+                "&:hover": {
+                  background: "#01101E",
+                },
+              },
+            ]}>
+            Page suivante
+          </Button>
+        </Group>
+      </ScrollArea>
+    </>
   );
 }
