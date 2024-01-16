@@ -32,7 +32,7 @@ const PageLayoutTemplate = ({ children }: Props) => {
   return (
     <Container
       fluid={true}
-      style={{ width: `${windowSize[0]} <= 768` ? "80%" : "90%", position: "relative", left: `${windowSize[0]} <= 768` ? "2%" : "10%" }}
+      style={{ width: `${windowSize[0]} <= 768` ? "70%" : "90%", position: "relative", left: `${windowSize[0]} <= 768` ? "2%" : "10%" }}
       size="xl"
       className="page__layout--template">
       {children}
