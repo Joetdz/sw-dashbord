@@ -117,33 +117,6 @@ const TripsPage = () => {
                 <TripsTable data={trips.items} />
 
               </Flex>
-
-              // <DataTable
-              //   withBorder
-              //   records={records}
-              //   columns={[
-              //     {
-              //       accessor: "locations.from.name",
-              //       width: 100,
-              //       title: "Lieu de depart",
-              //     },
-              //     {
-              //       accessor: "locations.to.name",
-              //       width: 100,
-              //       title: "Lieu de destination",
-              //     },
-              //     { accessor: "passenger.name", width: 100, title: "Passager" },
-              //     { accessor: "driver.name", width: 100, title: "Chauffeur" },
-              //     { accessor: "car.model", width: 100, title: "Voiture" },
-              //   ]}
-              //   totalRecords={trips.items.length}
-              //   paginationColor="grape"
-              //   recordsPerPage={pageSize}
-              //   page={page}
-              //   onPageChange={(p) => setPage(p)}
-              //   recordsPerPageOptions={PAGE_SIZES}
-              //   onRecordsPerPageChange={setPageSize}
-              // />
             )}
           </Flex>
         )}
