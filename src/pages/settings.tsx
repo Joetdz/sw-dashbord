@@ -85,7 +85,7 @@ const SettingsPage = () => {
                       background: "#0C3966",
                       borderRadius: "25px",
                       marginBottom: "20px",
-                      width: "20%",
+                      width: "auto",
                     },
                     {
                       "&:hover": {
@@ -147,12 +147,13 @@ const SettingsPage = () => {
                   <Button
                     type="submit"
                     sx={[
-                      { background: "#0C3966", borderRadius: "25px" },
+                      { background: "#0C3966", borderRadius: "25px", width: "auto" },
                       {
                         "&:hover": {
                           background: "#F9A507",
                         },
                       },
+
                     ]}>
                     Enregistrer
                   </Button>
