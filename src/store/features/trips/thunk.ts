@@ -29,7 +29,7 @@ type Content = {
         uid: string,
         phone: string
     }
-
+    taxType: string,
 }
 
 

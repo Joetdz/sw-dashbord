@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   createStyles,
   Table,
@@ -40,6 +40,7 @@ const useStyles = createStyles((theme) => ({
   control: {
     width: "100%",
     padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+    whiteSpace: 'nowrap',
 
     "&:hover": {
       backgroundColor:
@@ -109,7 +110,7 @@ export function TripsTable({ data }: TableSortProps) {
   const [sortBy, setSortBy] = useState<keyof TripDataType | null>(null);
   // const [sortBy, setSortBy] = useState<'timeStamps.command' | null>('timeStamps.command');
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  const [selectedDateRange, setSelectedDateRange] = useState<Date | null | undefined>();
+  const [selectedDateRange, setSelectedDateRange] = useState<Date | null | undefined>(new Date());
   const [currentPage, setCurrentPage] = useState<number>(1);
 
 
@@ -124,33 +125,31 @@ export function TripsTable({ data }: TableSortProps) {
     });
   }
 
-  function sortData(
-    data: TripDataType[],
-    payload: { sortBy: keyof TripDataType | null; reversed: boolean; selectedDateRange: Date | null | undefined },
-  ) {
-    const { sortBy, selectedDateRange } = payload;
 
-    let filteredData = filterByDate(data, selectedDateRange);
 
-    if (!sortBy) {
-      return filteredData;
-    }
+  const sortData = useCallback(
+    (data: TripDataType[], payload: { sortBy: keyof TripDataType | null; reversed: boolean; selectedDateRange: Date | null | undefined }) => {
+      const { sortBy, selectedDateRange } = payload;
 
-    if (!selectedDateRange) {
-      console.log({ selectedDateRange })
-      return data.sort((a, b) => {
-        console.log(a.timeStamps.command._seconds - b.timeStamps.command._seconds);
+      let filteredData = filterByDate(data, selectedDateRange);
+
+      if (!sortBy) {
+        return filteredData;
+      }
+
+      if (!selectedDateRange) {
+        return data.slice().sort((a, b) => a.timeStamps.command._seconds - b.timeStamps.command._seconds);
+      }
+
+      return filteredData.sort((a, b) => {
+        if (payload.reversed) {
+          return (`${b[sortBy]}` as string).localeCompare(`${a[sortBy]}` as string);
+        }
         return a.timeStamps.command._seconds - b.timeStamps.command._seconds;
       });
-    }
-
-    return filteredData.sort((a, b) => {
-      if (payload.reversed) {
-        return (`${b[sortBy]}` as string).localeCompare(`${a[sortBy]}` as string);
-      }
-      return a.timeStamps.command._seconds - b.timeStamps.command._seconds;
-    });
-  }
+    },
+    []
+  );
 
 
   const setSorting = (field: keyof TripDataType | null) => {
@@ -179,6 +178,11 @@ export function TripsTable({ data }: TableSortProps) {
     setCurrentPage(page);
   };
 
+
+  useEffect(() => {
+    // Update the sorted data when selectedDateRange changes
+    setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, selectedDateRange }));
+  }, [data, sortBy, reverseSortDirection, selectedDateRange, sortData]);
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
@@ -254,12 +258,14 @@ export function TripsTable({ data }: TableSortProps) {
         placeholder="Sélectionnez une date"
         value={selectedDateRange}
         onChange={(event: any) => {
-
           setSelectedDateRange(event)
           handleSearchChange(event)
         }}
         allowDeselect
         valueFormat="DD/MM/YYYY"
+        defaultValue={new Date()}
+        defaultDate={new Date()}
+
       />
       <ScrollArea>
 
