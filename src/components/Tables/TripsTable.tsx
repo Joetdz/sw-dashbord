@@ -274,7 +274,7 @@ export function TripsTable({ data }: TableSortProps) {
           horizontalSpacing="md"
           verticalSpacing="xs"
           miw={1400}
-          sx={{ tableLayout: "fixed" }}>
+          sx={{ tableLayout: "fixed", width: "" }}>
           <thead>
             <tr>
               <Th
