@@ -5,6 +5,7 @@ import {
   IconIdBadge2,
   IconBrandTripadvisor,
   IconSettings,
+  IconWallet
 } from "@tabler/icons-react";
 import {
   Loader,
@@ -30,6 +31,7 @@ import {
   activateDriver,
   deactivateDriver,
   editDriverPassword,
+  creditDriverWallet
 } from "../store/features/drivers/thunk";
 import { getTrips } from "../store/features/trips/thunk";
 import { DriversTripsTable } from "../components/Tables/DriverTripsTable";
@@ -58,6 +60,7 @@ const SingleDriver = () => {
   const navigate = useNavigate();
 
   const [edit, setEdit] = useState<boolean>(false);
+  const [add, setAdd] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getSingleDriver(id));
@@ -72,13 +75,12 @@ const SingleDriver = () => {
     (trips: any) => trips.driver && trips.driver.uid === id
   );
 
-  const [value, setValue] = useState<string>(
-    drivers.singleDriverDetails.password
-  );
 
   const form = useForm({
     initialValues: {
       password: "",
+      amount: 0,
+      currency: "",
     },
   });
 
@@ -114,6 +116,17 @@ const SingleDriver = () => {
                 >
                   Paramètres
                 </Tabs.Tab>
+
+                <Tabs.Tab
+                  value="wallet"
+                  icon={<IconWallet size="0.8rem" />}
+                >
+                  Porte monnaie
+                </Tabs.Tab>
+
+
+
+
               </Tabs.List>
 
               <Tabs.Panel value="identity" pt="xs">
@@ -268,6 +281,121 @@ const SingleDriver = () => {
                         <Flex direction="row" sx={{ margin: "2em 0" }}>
                           <Button
                             onClick={() => setEdit(false)}
+                            sx={[
+                              {
+                                background: "#F31D1D",
+                                borderRadius: "25px",
+
+                                marginRight: "2em",
+                              },
+                              {
+                                "&:hover": {
+                                  background: "#F9A507",
+                                },
+                              },
+                            ]}
+                          >
+                            Annuler
+                          </Button>
+                          <Button
+                            type="submit"
+                            sx={[
+                              {
+                                background: "#0C3966",
+                                borderRadius: "25px",
+                              },
+                              {
+                                "&:hover": {
+                                  background: "#F9A507",
+                                },
+                              },
+                            ]}
+                          >
+                            Enregistrer
+                          </Button>
+                        </Flex>
+                      </form>
+                      <ToastContainer />
+                    </Stack>
+                  )}
+                </Flex>
+              </Tabs.Panel>
+
+              <Tabs.Panel value="wallet" pt="xs">
+                <Flex sx={{ width: "50%" }} justify="space-between">
+
+                  {!add ? (
+                    <Stack>
+                      <Flex direction="row">
+                        <Button
+                          onClick={() => setAdd(true)}
+                          style={{
+                            background: "#0C3966",
+                            borderRadius: "25px",
+                          }}
+                        >
+                          Approvisionner le porte monnaie
+                        </Button>
+                      </Flex>
+                    </Stack>
+                  ) : (
+                    <Stack>
+                      <Title order={3}>Approvisionner le compte</Title>
+                      <form
+                        onSubmit={form.onSubmit(async () => {
+                          await toast.promise(
+                            dispatch(
+                              creditDriverWallet({
+                                id: id,
+                                content: {
+                                  amount: +form.values.amount,
+                                  currency: form.values.currency,
+                                },
+                              })
+                            ),
+                            {
+                              pending: "Approvisionnementt en cours",
+                              success: "Approvisionnement réussie avec succès",
+                              error:
+                                "Une erreur s'est produite lors de l'approvisionnement",
+                            }
+                          );
+
+                          setAdd(false)
+                          navigate(`/drivers/${id}`, { replace: true });
+                          // window.location.reload();
+                        })}
+                      >
+                        <Stack>
+                          <TextInput
+                            type="number"
+                            placeholder="Veuillez la somme"
+                            onChange={(event: any) => {
+                              form.setFieldValue(
+                                "amount",
+                                event.currentTarget.value
+                              );
+                            }}
+                          />
+                          <NativeSelect
+                            label="Devise "
+                            placeholder="Sélectionner la devise"
+                            data={[
+                              { value: "--", label: "--" },
+                              { value: "usd", label: "USD" },
+                              { value: "cdf", label: "CDF" }
+                            ]}
+                            onChange={
+                              (event) => {
+                                form.setFieldValue("currency", event.currentTarget.value)
+                              }
+                            }
+                          />
+                        </Stack>
+
+                        <Flex direction="row" sx={{ margin: "2em 0" }}>
+                          <Button
+                            onClick={() => setAdd(false)}
                             sx={[
                               {
                                 background: "#F31D1D",

@@ -46,3 +46,8 @@ export interface TripDataType {
         end: Date;
     };
 }
+
+export interface DriverWallet {
+    amount: number,
+    currency: string;
+}

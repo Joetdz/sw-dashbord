@@ -1,5 +1,5 @@
 import { createSlice, } from "@reduxjs/toolkit";
-import { getDrivers, activateDriver, deactivateDriver, getSingleDriver, editDriverPassword } from "./thunk";
+import { getDrivers, activateDriver, deactivateDriver, getSingleDriver, editDriverPassword, creditDriverWallet } from "./thunk";
 
 
 
@@ -14,6 +14,7 @@ interface DriverState {
     singleDriverDetails: string,
     isActiving: boolean,
     isDeactivating: boolean,
+    isSaving: boolean,
 }
 
 const initialState = {
@@ -26,7 +27,8 @@ const initialState = {
     isLoading: false,
     singleDriverDetails: "",
     isActiving: false,
-    isDeactivating: false
+    isDeactivating: false,
+    isSaving: false
 } as DriverState;
 
 
@@ -107,7 +109,7 @@ export const driverSlice = createSlice({
                     hasError: false
                 }
             })
-        
+
             .addCase(getSingleDriver.pending, (state: any, action) => {
                 return {
                     ...state,
@@ -115,7 +117,7 @@ export const driverSlice = createSlice({
                     hasError: false
                 }
             })
-        
+
             .addCase(getSingleDriver.fulfilled, (state: any, action) => {
                 return {
                     ...state,
@@ -125,8 +127,8 @@ export const driverSlice = createSlice({
 
                 }
             })
-        
-        
+
+
             .addCase(getSingleDriver.rejected, (state: any, action) => {
                 return {
                     ...state,
@@ -155,6 +157,30 @@ export const driverSlice = createSlice({
                 return {
                     ...state,
                     isUpdating: false,
+                    hasError: true
+                }
+            })
+
+            .addCase(creditDriverWallet.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(creditDriverWallet.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: false,
+                    hasError: false
+                }
+            })
+
+            .addCase(creditDriverWallet.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isSaving: false,
                     hasError: true
                 }
             })
