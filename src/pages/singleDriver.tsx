@@ -16,12 +16,12 @@ import {
   Container,
   TextInput,
   Button,
-  NumberInput,
   NativeSelect,
   PasswordInput,
   Tabs,
+  Grid
 } from "@mantine/core";
-import { useForm, isNotEmpty, hasLength } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { toast, ToastContainer } from "react-toastify";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { NavbarSimple } from "../components/SideBar";
@@ -83,6 +83,8 @@ const SingleDriver = () => {
       currency: "",
     },
   });
+
+  console.log(drivers.singleDriverDetails.wallets);
 
   return (
     <div style={{ display: "flex" }}>
@@ -275,6 +277,7 @@ const SingleDriver = () => {
                                 event.currentTarget.value
                               );
                             }}
+                            required
                           />
                         </Stack>
 
@@ -322,10 +325,22 @@ const SingleDriver = () => {
               </Tabs.Panel>
 
               <Tabs.Panel value="wallet" pt="xs">
-                <Flex sx={{ width: "50%" }} justify="space-between">
+                <Flex sx={{ width: "100%" }} justify="space-between">
 
                   {!add ? (
-                    <Stack>
+                    <Stack w="100%">
+
+                      <Grid sx={{ width: "100%", height: "150px", marginTop: "20px" }}>
+                        <Grid.Col span={5} sx={{ background: "#0C3966", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", borderRadius: "10px", marginRight: "25px", color: "#FFFFFF" }}>
+                          <Title order={3}>Compte USD</Title>
+                          <Text >{drivers.singleDriverDetails && drivers.singleDriverDetails.wallets.usd.amount}</Text>
+                        </Grid.Col>
+                        <Grid.Col span={5} sx={{ background: "#F9A507", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", borderRadius: "10px", marginRight: "25px", color: "#FFFFFF" }}>
+                          <Title order={3}>Compte CDF</Title>
+                          <Text>{drivers.singleDriverDetails && drivers.singleDriverDetails.wallets.cdf.amount}</Text>
+                        </Grid.Col>
+
+                      </Grid>
                       <Flex direction="row">
                         <Button
                           onClick={() => setAdd(true)}
@@ -337,6 +352,8 @@ const SingleDriver = () => {
                           Approvisionner le porte monnaie
                         </Button>
                       </Flex>
+
+
                     </Stack>
                   ) : (
                     <Stack>
@@ -376,6 +393,7 @@ const SingleDriver = () => {
                                 event.currentTarget.value
                               );
                             }}
+                            required
                           />
                           <NativeSelect
                             label="Devise "
@@ -390,6 +408,7 @@ const SingleDriver = () => {
                                 form.setFieldValue("currency", event.currentTarget.value)
                               }
                             }
+                            required
                           />
                         </Stack>
 
