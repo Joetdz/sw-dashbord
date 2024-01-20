@@ -36,6 +36,7 @@ import {
 import { getTrips } from "../store/features/trips/thunk";
 import { DriversTripsTable } from "../components/Tables/DriverTripsTable";
 import Header from "../components/Header";
+import WalletHistoryTable from "../components/Tables/WalletHistoryTable";
 
 const SingleDriver = () => {
   const { id } = useParams<{ id?: string }>();
@@ -83,8 +84,6 @@ const SingleDriver = () => {
       currency: "",
     },
   });
-
-  console.log(drivers.singleDriverDetails.wallets);
 
   return (
     <div style={{ display: "flex" }}>
@@ -351,6 +350,10 @@ const SingleDriver = () => {
                         >
                           Approvisionner le porte monnaie
                         </Button>
+                      </Flex>
+                      <Flex direction="column">
+                        <Title order={3}>Historique de transaction</Title>
+                        <WalletHistoryTable data={drivers.singleDriverDetails && drivers.singleDriverDetails.wallets} />
                       </Flex>
 
 

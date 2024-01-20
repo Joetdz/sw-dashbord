@@ -29,7 +29,8 @@ import {
   IconCheck
 } from "@tabler/icons-react";
 //import { Link } from "react-router-dom";
-import { TripDataType } from "../../lib/types";
+import TableHeader from "./TableHeader";
+import { TripDataType, ThProps } from "../../lib/types";
 
 
 const useStyles = createStyles((theme) => ({
@@ -60,36 +61,6 @@ const useStyles = createStyles((theme) => ({
 
 interface TableSortProps {
   data: TripDataType[];
-}
-
-interface ThProps {
-  children: React.ReactNode;
-  reversed: boolean;
-  sorted: boolean;
-  onSort(): void;
-}
-
-function Th({ children, reversed, sorted, onSort }: ThProps) {
-  const { classes } = useStyles();
-  const Icon = sorted
-    ? reversed
-      ? IconChevronUp
-      : IconChevronDown
-    : IconSelector;
-  return (
-    <th className={classes.th}>
-      <UnstyledButton onClick={onSort} className={classes.control}>
-        <Group position="apart">
-          <Text fw={500} fz="sm">
-            {children}
-          </Text>
-          <Center className={classes.icon}>
-            <Icon size="0.9rem" stroke={1.5} />
-          </Center>
-        </Group>
-      </UnstyledButton>
-    </th>
-  );
 }
 
 function filterData(data: TripDataType[], search: string) {
@@ -277,63 +248,63 @@ export function TripsTable({ data }: TableSortProps) {
           sx={{ tableLayout: "fixed", width: "" }}>
           <thead>
             <tr>
-              <Th
+              <TableHeader
                 sorted={sortBy === "locations"}
                 //sorted={sortBy === 'timeStamps.command'}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("locations")}>
                 Départ
-              </Th>
-              <Th
+              </TableHeader>
+              <TableHeader
                 sorted={sortBy === "locations"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("locations")}>
                 Destination
-              </Th>
-              <Th
+              </TableHeader>
+              <TableHeader
                 sorted={sortBy === "timeStamps"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("timeStamps")}>
                 Date
-              </Th>
-              <Th
+              </TableHeader>
+              <TableHeader
                 sorted={sortBy === "timeStamps"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("timeStamps")}>
                 Etat de la course
-              </Th>
-              <Th
+              </TableHeader>
+              <TableHeader
                 sorted={sortBy === "passenger"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("passenger")}>
                 Passager
-              </Th>
-              <Th
+              </TableHeader>
+              <TableHeader
                 sorted={sortBy === "driver"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("driver")}>
                 Chauffeur
-              </Th>
+              </TableHeader>
 
-              <Th
+              <TableHeader
                 sorted={sortBy === "car"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("car")}>
                 Véhicule utilisé
-              </Th>
+              </TableHeader>
 
-              <Th
+              <TableHeader
                 sorted={sortBy === "action"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("action")}>
                 Type de course
-              </Th>
-              <Th
+              </TableHeader>
+              <TableHeader
                 sorted={sortBy === "action"}
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("action")}>
                 Lien de la course
-              </Th>
+              </TableHeader>
             </tr>
           </thead>
           <tbody>

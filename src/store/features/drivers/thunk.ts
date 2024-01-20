@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { DriverWallet } from "../../../lib/types";
+import { DriverWalletDto } from "../../../lib/types";
 import axios from "axios";
 
 
@@ -57,8 +57,9 @@ export const editDriverPassword = createAsyncThunk("drivers/editDriverPassword",
 })
 
 
+
 // Credit driver wallet
-export const creditDriverWallet = createAsyncThunk("drivers/creditDriverWallet", async (params: { id: string | undefined, content: DriverWallet }) => {
+export const creditDriverWallet = createAsyncThunk("drivers/creditDriverWallet", async (params: { id: string | undefined, content: DriverWalletDto }) => {
     return axios({
         method: "POST",
         data: params.content,
