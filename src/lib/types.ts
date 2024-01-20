@@ -46,3 +46,39 @@ export interface TripDataType {
         end: Date;
     };
 }
+export interface DriverWalletDto {
+    amount: number,
+    currency: string;
+}
+
+export interface WalletHistory {
+    amount: number,
+    type: string,
+    createdAt: {
+        _seconds: any,
+    },
+    tripUid: string
+}
+
+export interface DriverWallet {
+    amount: number,
+    history: WalletHistory[];
+}
+
+export enum TransactionType {
+    debit = "debit",
+    credit = "credit",
+}
+
+export interface DriverWallets {
+    usd: DriverWallet,
+    cdf: DriverWallet
+}
+
+
+export interface ThProps {
+    children: React.ReactNode;
+    reversed: boolean;
+    sorted: boolean;
+    onSort(): void;
+}

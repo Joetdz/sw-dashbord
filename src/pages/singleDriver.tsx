@@ -5,6 +5,7 @@ import {
   IconIdBadge2,
   IconBrandTripadvisor,
   IconSettings,
+  IconWallet
 } from "@tabler/icons-react";
 import {
   Loader,
@@ -15,12 +16,12 @@ import {
   Container,
   TextInput,
   Button,
-  NumberInput,
   NativeSelect,
   PasswordInput,
   Tabs,
+  Grid
 } from "@mantine/core";
-import { useForm, isNotEmpty, hasLength } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { toast, ToastContainer } from "react-toastify";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
 import { NavbarSimple } from "../components/SideBar";
@@ -30,10 +31,12 @@ import {
   activateDriver,
   deactivateDriver,
   editDriverPassword,
+  creditDriverWallet
 } from "../store/features/drivers/thunk";
 import { getTrips } from "../store/features/trips/thunk";
 import { DriversTripsTable } from "../components/Tables/DriverTripsTable";
 import Header from "../components/Header";
+import WalletHistoryTable from "../components/Tables/WalletHistoryTable";
 
 const SingleDriver = () => {
   const { id } = useParams<{ id?: string }>();
@@ -58,6 +61,7 @@ const SingleDriver = () => {
   const navigate = useNavigate();
 
   const [edit, setEdit] = useState<boolean>(false);
+  const [add, setAdd] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getSingleDriver(id));
@@ -72,13 +76,12 @@ const SingleDriver = () => {
     (trips: any) => trips.driver && trips.driver.uid === id
   );
 
-  const [value, setValue] = useState<string>(
-    drivers.singleDriverDetails.password
-  );
 
   const form = useForm({
     initialValues: {
       password: "",
+      amount: 0,
+      currency: "",
     },
   });
 
@@ -114,6 +117,17 @@ const SingleDriver = () => {
                 >
                   Paramètres
                 </Tabs.Tab>
+
+                <Tabs.Tab
+                  value="wallet"
+                  icon={<IconWallet size="0.8rem" />}
+                >
+                  Porte monnaie
+                </Tabs.Tab>
+
+
+
+
               </Tabs.List>
 
               <Tabs.Panel value="identity" pt="xs">
@@ -262,12 +276,148 @@ const SingleDriver = () => {
                                 event.currentTarget.value
                               );
                             }}
+                            required
                           />
                         </Stack>
 
                         <Flex direction="row" sx={{ margin: "2em 0" }}>
                           <Button
                             onClick={() => setEdit(false)}
+                            sx={[
+                              {
+                                background: "#F31D1D",
+                                borderRadius: "25px",
+
+                                marginRight: "2em",
+                              },
+                              {
+                                "&:hover": {
+                                  background: "#F9A507",
+                                },
+                              },
+                            ]}
+                          >
+                            Annuler
+                          </Button>
+                          <Button
+                            type="submit"
+                            sx={[
+                              {
+                                background: "#0C3966",
+                                borderRadius: "25px",
+                              },
+                              {
+                                "&:hover": {
+                                  background: "#F9A507",
+                                },
+                              },
+                            ]}
+                          >
+                            Enregistrer
+                          </Button>
+                        </Flex>
+                      </form>
+                      <ToastContainer />
+                    </Stack>
+                  )}
+                </Flex>
+              </Tabs.Panel>
+
+              <Tabs.Panel value="wallet" pt="xs">
+                <Flex sx={{ width: "100%" }} justify="space-between">
+
+                  {!add ? (
+                    <Stack w="100%">
+
+                      <Grid sx={{ width: "100%", height: "150px", marginTop: "20px" }}>
+                        <Grid.Col span={5} sx={{ background: "#0C3966", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", borderRadius: "10px", marginRight: "25px", color: "#FFFFFF" }}>
+                          <Title order={3}>Compte USD</Title>
+                          <Text >{drivers.singleDriverDetails && drivers.singleDriverDetails.wallets.usd.amount}</Text>
+                        </Grid.Col>
+                        <Grid.Col span={5} sx={{ background: "#F9A507", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", borderRadius: "10px", marginRight: "25px", color: "#FFFFFF" }}>
+                          <Title order={3}>Compte CDF</Title>
+                          <Text>{drivers.singleDriverDetails && drivers.singleDriverDetails.wallets.cdf.amount}</Text>
+                        </Grid.Col>
+
+                      </Grid>
+                      <Flex direction="row">
+                        <Button
+                          onClick={() => setAdd(true)}
+                          style={{
+                            background: "#0C3966",
+                            borderRadius: "25px",
+                          }}
+                        >
+                          Approvisionner le porte monnaie
+                        </Button>
+                      </Flex>
+                      <Flex direction="column">
+                        <Title order={3}>Historique de transaction</Title>
+                        <WalletHistoryTable data={drivers.singleDriverDetails && drivers.singleDriverDetails.wallets} />
+                      </Flex>
+
+
+                    </Stack>
+                  ) : (
+                    <Stack>
+                      <Title order={3}>Approvisionner le compte</Title>
+                      <form
+                        onSubmit={form.onSubmit(async () => {
+                          await toast.promise(
+                            dispatch(
+                              creditDriverWallet({
+                                id: id,
+                                content: {
+                                  amount: +form.values.amount,
+                                  currency: form.values.currency,
+                                },
+                              })
+                            ),
+                            {
+                              pending: "Approvisionnementt en cours",
+                              success: "Approvisionnement réussie avec succès",
+                              error:
+                                "Une erreur s'est produite lors de l'approvisionnement",
+                            }
+                          );
+
+                          setAdd(false)
+                          navigate(`/drivers/${id}`, { replace: true });
+                          // window.location.reload();
+                        })}
+                      >
+                        <Stack>
+                          <TextInput
+                            type="number"
+                            placeholder="Veuillez la somme"
+                            onChange={(event: any) => {
+                              form.setFieldValue(
+                                "amount",
+                                event.currentTarget.value
+                              );
+                            }}
+                            required
+                          />
+                          <NativeSelect
+                            label="Devise "
+                            placeholder="Sélectionner la devise"
+                            data={[
+                              { value: "--", label: "--" },
+                              { value: "usd", label: "USD" },
+                              { value: "cdf", label: "CDF" }
+                            ]}
+                            onChange={
+                              (event) => {
+                                form.setFieldValue("currency", event.currentTarget.value)
+                              }
+                            }
+                            required
+                          />
+                        </Stack>
+
+                        <Flex direction="row" sx={{ margin: "2em 0" }}>
+                          <Button
+                            onClick={() => setAdd(false)}
                             sx={[
                               {
                                 background: "#F31D1D",
