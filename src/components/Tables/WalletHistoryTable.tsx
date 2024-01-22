@@ -114,6 +114,7 @@ const WalletHistoryTable = ({ data }: WalletTableProps) => {
 
     const rows = data && filteredData.history.map((row, index) => (
         <tr key={index}>
+            <td>{index + 1}</td>
             <td>
                 {row.amount}
             </td>
@@ -166,6 +167,12 @@ const WalletHistoryTable = ({ data }: WalletTableProps) => {
                     sx={{ tableLayout: "fixed", width: "" }}>
                     <thead>
                         <tr>
+                            <TableHeader
+                                sorted={sortBy === "amount"}
+                                reversed={reverseSortDirection}
+                                onSort={() => console.log("amount")}>
+                                #
+                            </TableHeader>
                             <TableHeader
                                 sorted={sortBy === "amount"}
                                 reversed={reverseSortDirection}

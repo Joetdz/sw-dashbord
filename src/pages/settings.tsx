@@ -9,12 +9,13 @@ import {
   Switch,
   NativeSelect,
   Button,
-  Select,
+  TextInput,
 } from "@mantine/core";
 import PageLayoutTemplate from "../components/PageLayoutTemplate";
-import { getSettings, updateTaxType } from "../store/features/settings/thunk";
+import { getSettings, updateSettings } from "../store/features/settings/thunk";
 import { toast, ToastContainer } from "react-toastify";
 import Header from "../components/Header";
+import { log } from "console";
 
 const SettingsPage = () => {
   const [checked, setChecked] = useState(true);
@@ -44,6 +45,9 @@ const SettingsPage = () => {
 
   const [value, setValue] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false);
+  const [editSettings, setEditSettings] = useState<{ taxType: boolean, deductablePercentage: boolean }>({
+    taxType: false, deductablePercentage: false
+  })
 
   const handleChange = () => {
     return !checked ? setValue("minute") : setValue("hour");
@@ -52,8 +56,11 @@ const SettingsPage = () => {
   const form = useForm({
     initialValues: {
       taxType: settings.items.taxType,
+      deductablePercentage: settings.items.deductablePercentage
     },
   });
+
+  console.log(settings.items)
 
   return (
     <div style={{ display: "flex" }}>
@@ -70,7 +77,7 @@ const SettingsPage = () => {
           <Flex
             direction="column"
             sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
-            {!edit ? (
+            {!editSettings.taxType ? (
               <>
                 <Text>
                   Course taxée par :{" "}
@@ -79,13 +86,16 @@ const SettingsPage = () => {
                   {settings.items.taxType === "km" && "KM"}
                 </Text>
                 <Button
-                  onClick={() => setEdit(true)}
+                  onClick={() => setEditSettings({
+                    taxType: true,
+                    deductablePercentage: false
+                  })}
                   sx={[
                     {
                       background: "#0C3966",
                       borderRadius: "25px",
                       marginBottom: "20px",
-                      width: "auto",
+                      width: "50%",
                     },
                     {
                       "&:hover": {
@@ -100,7 +110,10 @@ const SettingsPage = () => {
               <form
                 onSubmit={form.onSubmit(async () => {
                   await toast.promise(
-                    dispatch(updateTaxType(form.values.taxType)),
+                    dispatch(updateSettings({
+                      taxType: form.values.taxType,
+                      deductablePercentage: settings.items.deductablePercentage
+                    })),
                     {
                       pending: "Modification de la tarification en cours",
                       success:
@@ -129,7 +142,104 @@ const SettingsPage = () => {
 
                 <Flex direction="row" sx={{ margin: "2em 0" }}>
                   <Button
-                    onClick={() => setEdit(false)}
+                    onClick={() => setEditSettings({
+                      taxType: false,
+                      deductablePercentage: false
+                    })}
+                    sx={[
+                      {
+                        background: "#F31D1D",
+                        borderRadius: "25px",
+                        marginRight: "2em",
+                      },
+                      {
+                        "&:hover": {
+                          background: "#F9A507",
+                        },
+                      },
+                    ]}>
+                    Annuler
+                  </Button>
+                  <Button
+                    type="submit"
+                    sx={[
+                      { background: "#0C3966", borderRadius: "25px", width: "auto" },
+                      {
+                        "&:hover": {
+                          background: "#F9A507",
+                        },
+                      },
+
+                    ]}>
+                    Enregistrer
+                  </Button>
+                </Flex>
+              </form>
+            )}
+
+            {!editSettings.deductablePercentage ? (
+              <>
+                <Text>
+                  Pourcentage déduit {": "}
+                  {settings.items.deductablePercentage} %
+                </Text>
+                <Button
+                  onClick={() => setEditSettings({
+                    taxType: false,
+                    deductablePercentage: true
+                  })}
+                  sx={[
+                    {
+                      background: "#0C3966",
+                      borderRadius: "25px",
+                      marginBottom: "20px",
+                      width: "50%",
+                    },
+                    {
+                      "&:hover": {
+                        background: "#01101E",
+                      },
+                    },
+                  ]}>
+                  Modifier
+                </Button>
+              </>
+            ) : (
+              <form
+                onSubmit={form.onSubmit(async () => {
+
+                  await toast.promise(
+                    dispatch(updateSettings({
+                      taxType: settings.items.taxType,
+                      deductablePercentage: +form.values.deductablePercentage
+                    })),
+                    {
+                      pending: "Modification du pourcentage déduit",
+                      success:
+                        "Modification du pourcentage déduit réussie avec succès",
+                      error:
+                        "Une erreur s'est produite lors de la modification",
+                    },
+                  );
+                  window.location.reload();
+
+                })}>
+                <TextInput
+                  label="Modifier le pourcentage déduit : "
+                  placeholder="Modifier le pourcentage déduit : "
+                  type="number"
+                  onChange={
+                    (event) => {
+                      form.setFieldValue("deductablePercentage", event.currentTarget.value)
+                    }
+                  }
+                />
+                <Flex direction="row" sx={{ margin: "2em 0" }}>
+                  <Button
+                    onClick={() => setEditSettings({
+                      taxType: false,
+                      deductablePercentage: false
+                    })}
                     sx={[
                       {
                         background: "#F31D1D",

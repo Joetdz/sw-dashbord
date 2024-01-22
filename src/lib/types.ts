@@ -82,3 +82,9 @@ export interface ThProps {
     sorted: boolean;
     onSort(): void;
 }
+
+export interface SettingsContentType {
+    taxType: string,
+    deductablePercentage: number
+
+}
