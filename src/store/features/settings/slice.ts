@@ -1,21 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSettings, updateTaxType } from "./thunk";
+import { getSettings, updateSettings } from "./thunk";
 
 
 
 interface SettingState {
-
     isCreating: boolean,
-
     hasError: boolean,
     isUpdating: boolean,
     new: string,
     isLoading: boolean,
-
     items: string[],
     singleSettingDetails: string
 }
-
 
 
 const initialState = {
@@ -61,21 +57,21 @@ export const settingSlice = createSlice({
             })
 
 
-            .addCase(updateTaxType.pending, (state: any, action) => {
+            .addCase(updateSettings.pending, (state: any, action) => {
                 return {
                     ...state,
                     isUpdating: true,
                     hasError: false
                 }
             })
-            .addCase(updateTaxType.fulfilled, (state: any, action) => {
+            .addCase(updateSettings.fulfilled, (state: any, action) => {
                 return {
                     ...state,
                     isUpdating: false,
                     hasError: false
                 }
             })
-            .addCase(updateTaxType.rejected, (state: any, action) => {
+            .addCase(updateSettings.rejected, (state: any, action) => {
                 return {
                     ...state,
                     isUpdating: false,
