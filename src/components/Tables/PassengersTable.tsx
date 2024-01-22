@@ -127,11 +127,14 @@ function sortData(
   );
 }
 
+const ROWS_PER_PAGE = 10;
+
 export function PassengersTable({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const setSorting = (field: keyof RowData) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
@@ -147,14 +150,21 @@ export function PassengersTable({ data }: TableSortProps) {
     setSortedData(
       sortData(data, { sortBy, reversed: reverseSortDirection, search: value }),
     );
+
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const dispatch = useDispatch<any>();
 
   const navigate = useNavigate();
 
-  const rows = sortedData.map((row) => (
+  const rows = sortedData.map((row, index) => (
     <tr key={row.uid}>
+      <td>{index + 1}</td>
       <td>
         <Link to={`/passengers/${row.uid}`}>{row.name}</Link>
       </td>
@@ -178,6 +188,11 @@ export function PassengersTable({ data }: TableSortProps) {
     </tr>
   ));
 
+
+  const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+  const endIndex = startIndex + ROWS_PER_PAGE;
+  const paginatedRows = rows.slice(startIndex, endIndex);
+
   return (
     <ScrollArea>
       <TextInput
@@ -194,6 +209,12 @@ export function PassengersTable({ data }: TableSortProps) {
         sx={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
+            <Th
+              sorted={sortBy === "name"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("name")}>
+              #
+            </Th>
             <Th
               sorted={sortBy === "name"}
               reversed={reverseSortDirection}
@@ -228,8 +249,8 @@ export function PassengersTable({ data }: TableSortProps) {
           </tr>
         </thead>
         <tbody>
-          {rows.length > 0 ? (
-            rows
+          {paginatedRows.length > 0 ? (
+            paginatedRows
           ) : (
             <tr>
               <td colSpan={Object.keys(data[0]).length}>
@@ -241,6 +262,43 @@ export function PassengersTable({ data }: TableSortProps) {
           )}
         </tbody>
       </Table>
+      <Group position="left">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          sx={[
+            {
+              background: "#0C3966",
+              borderRadius: "25px",
+              marginBottom: "20px",
+            },
+            {
+              "&:hover": {
+                background: "#01101E",
+              },
+            },
+          ]}>
+          Page précédente
+        </Button>
+        <span>{`Page ${currentPage}`}</span>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={endIndex >= rows.length}
+          sx={[
+            {
+              background: "#0C3966",
+              borderRadius: "25px",
+              marginBottom: "20px",
+            },
+            {
+              "&:hover": {
+                background: "#01101E",
+              },
+            },
+          ]}>
+          Page suivante
+        </Button>
+      </Group>
     </ScrollArea>
   );
 }
