@@ -80,19 +80,6 @@ const HomePage = () => {
 		(trips: any) => dateConverter(trips.timeStamps.command._seconds) === date
 	);
 
-	// console.log(
-	//   trips.items.map((trips: any) =>
-	//     dateConverter(trips.timeStamps.command._seconds) === date,
-	//   ),
-	// );
-
-	// console.log({ dayTrips, date });
-
-	// console.log(
-	//   new Date(trips.items.timeStamps.command._seconds * 1000).toLocaleString(),
-	// );
-	console.log(dayTrips);
-
 	const passengers = useSelector((state: any) => state.passengers);
 	const drivers = useSelector((state: any) => state.drivers);
 	return (

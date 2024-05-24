@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTrips, createTrip } from "./thunk";
+import { getTrips, createTrip, cancelTrip } from "./thunk";
 
 
 
@@ -114,6 +114,31 @@ export const tripSlice = createSlice({
                     hasError: true
                 }
             })
+
+            .addCase(cancelTrip.pending, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: true,
+                    hasError: false
+                }
+            })
+
+            .addCase(cancelTrip.fulfilled, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: false
+                }
+            })
+
+            .addCase(cancelTrip.rejected, (state: any, action) => {
+                return {
+                    ...state,
+                    isUpdating: false,
+                    hasError: true
+                }
+            })
+
     }
 
 })

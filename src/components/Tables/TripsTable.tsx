@@ -26,7 +26,8 @@ import {
   IconChevronUp,
   //IconSearch,
   IconLink,
-  IconCheck
+  IconCheck,
+  IconCircleX
 } from "@tabler/icons-react";
 //import { Link } from "react-router-dom";
 import TableHeader from "./TableHeader";
@@ -122,6 +123,10 @@ export function TripsTable({ data }: TableSortProps) {
     []
   );
 
+  const cancelTrip = () => {
+    console.log("Cancelled")
+  }
+
 
   const setSorting = (field: keyof TripDataType | null) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
@@ -215,6 +220,13 @@ export function TripsTable({ data }: TableSortProps) {
           </Tooltip>
         )}
       </CopyButton></td>
+      <td>
+        <Tooltip label={'Annuler la course'} withArrow position="right">
+          <ActionIcon color={'red'} variant="subtle" onClick={cancelTrip}>
+            <IconCircleX style={{ width: rem(16) }} />
+          </ActionIcon>
+        </Tooltip>
+      </td>
     </tr>
   ));
 
@@ -239,12 +251,10 @@ export function TripsTable({ data }: TableSortProps) {
 
       />
       <ScrollArea>
-
-
         <Table
           horizontalSpacing="md"
           verticalSpacing="xs"
-          miw={1400}
+          miw={1600}
           sx={{ tableLayout: "fixed", width: "" }}>
           <thead>
             <tr>
@@ -304,6 +314,12 @@ export function TripsTable({ data }: TableSortProps) {
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("action")}>
                 Lien de la course
+              </TableHeader>
+              <TableHeader
+                sorted={sortBy === "action"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("action")}>
+                Actions de l'utisateur
               </TableHeader>
             </tr>
           </thead>
