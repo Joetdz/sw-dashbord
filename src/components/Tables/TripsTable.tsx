@@ -3,16 +3,13 @@ import {
   createStyles,
   Table,
   ScrollArea,
-  UnstyledButton,
   Group,
   Text,
-  Center,
-  TextInput,
   rem,
   Button,
   CopyButton, ActionIcon, Tooltip
 } from "@mantine/core";
-import { DatePicker, DatePickerInput } from '@mantine/dates';
+import { DatePickerInput } from '@mantine/dates';
 import { useDispatch } from "react-redux";
 import {
   activateDriver,
@@ -26,11 +23,13 @@ import {
   IconChevronUp,
   //IconSearch,
   IconLink,
-  IconCheck
+  IconCheck,
+  IconCircleX
 } from "@tabler/icons-react";
 //import { Link } from "react-router-dom";
 import TableHeader from "./TableHeader";
 import { TripDataType, ThProps } from "../../lib/types";
+import { cancelTrip } from "../../store/features/trips/thunk";
 
 
 const useStyles = createStyles((theme) => ({
@@ -122,7 +121,6 @@ export function TripsTable({ data }: TableSortProps) {
     []
   );
 
-
   const setSorting = (field: keyof TripDataType | null) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
@@ -154,6 +152,8 @@ export function TripsTable({ data }: TableSortProps) {
     // Update the sorted data when selectedDateRange changes
     setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, selectedDateRange }));
   }, [data, sortBy, reverseSortDirection, selectedDateRange, sortData]);
+  const dispatch = useDispatch<any>();
+
   const rows = sortedData.map((row) => (
     <tr key={row.uid}>
       <td>
@@ -215,6 +215,18 @@ export function TripsTable({ data }: TableSortProps) {
           </Tooltip>
         )}
       </CopyButton></td>
+      { /* 
+      <td>
+        <Tooltip label={'Annuler la course'} withArrow position="right">
+          <ActionIcon color={'red'} variant="subtle" onClick={async () => {
+
+            console.log(row.uid);
+            //await dispatch(cancelTrip({ uid: row.uid }));
+          }}>
+            <IconCircleX style={{ width: rem(16) }} />
+          </ActionIcon>
+        </Tooltip>
+      </td>*/ }
     </tr>
   ));
 
@@ -239,12 +251,10 @@ export function TripsTable({ data }: TableSortProps) {
 
       />
       <ScrollArea>
-
-
         <Table
           horizontalSpacing="md"
           verticalSpacing="xs"
-          miw={1400}
+          miw={1600}
           sx={{ tableLayout: "fixed", width: "" }}>
           <thead>
             <tr>
@@ -305,6 +315,14 @@ export function TripsTable({ data }: TableSortProps) {
                 onSort={() => setSorting("action")}>
                 Lien de la course
               </TableHeader>
+
+              { /*
+              <TableHeader
+                sorted={sortBy === "action"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("action")}>
+                Actions de l'utisateur
+              </TableHeader> */ }
             </tr>
           </thead>
           <tbody>
