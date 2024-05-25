@@ -57,7 +57,7 @@ export const createTrip = createAsyncThunk("trips/createTrip", async (content: C
 
 type CancelDto = {
     uid: string,
-    reason: string
+    //reason: string
 }
 
 export const cancelTrip = createAsyncThunk("trips/cancelTrip", async (content: CancelDto) => {
@@ -68,5 +68,5 @@ export const cancelTrip = createAsyncThunk("trips/cancelTrip", async (content: C
             "Content-Type": "application/json",
         },
         data: content
-    }).then((response) => response.data)
+    }).then((response) => console.log(response))
 })
