@@ -44,7 +44,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  if (token) {
+  if (!token) {
     dispatch(setAuth(true));
   }
 

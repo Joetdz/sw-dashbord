@@ -35,7 +35,8 @@ const ErrorMessage = () => {
           // dispatch(setLogging(false));
           dispatch(setError(false));
           window.location.reload();
-        }}>
+        }}
+      >
         veuillez réessayer
       </Button>
     </div>
@@ -75,14 +76,15 @@ const LoginPage = (props: PaperProps) => {
         justifyContent: "center",
         flexDirection: "column",
         height: "100vh",
-        background: "#0C3966",
+        background: "#8e2cff",
         padding: "0 2rem",
-      }}>
+      }}
+    >
       <Image
         maw={240}
         mx="auto"
         radius="md"
-        src="/logo-gari.png"
+        src="/sw-logo.png"
         alt="Random image"
         sx={{ margin: "1em 0" }}
       />
@@ -109,21 +111,21 @@ const LoginPage = (props: PaperProps) => {
                   localStorage.setItem("gari", response.data.token);
                   localStorage.setItem(
                     "loggedUser",
-                    JSON.stringify(response.data.user),
+                    JSON.stringify(response.data.user)
                   );
 
                   navigate("/", { replace: true });
                   setTimeout(() => {
                     dispatch(setAuth(true));
 
-                    dispatch(setLogging(false));
+                    dispatch(setLogging(true));
                     window.location.reload();
                   }, 5000);
                   toast.success(
                     "Connexion réussie ! Vous serez redirigés dans quelques sécondes",
                     {
                       position: toast.POSITION.TOP_RIGHT,
-                    },
+                    }
                   );
                 })
                 .catch((error) => {
@@ -136,14 +138,15 @@ const LoginPage = (props: PaperProps) => {
                 pending: "Connexion en cours",
                 success: "Connexion reussie !",
                 error: "Une erreur s'est produite lors de la connexion",
-              },
+              }
             );
-          })}>
+          })}
+        >
           <Stack>
             <TextInput
               required
               label="Email"
-              placeholder="hello@gari.com"
+              placeholder="hello@superwewa.com"
               value={form.values.email}
               onChange={(event) =>
                 form.setFieldValue("email", event.currentTarget.value)
@@ -183,7 +186,8 @@ const LoginPage = (props: PaperProps) => {
                     background: "#F9A507",
                   },
                 },
-              ]}>
+              ]}
+            >
               {upperFirst(type)}
             </Button>
           </Group>

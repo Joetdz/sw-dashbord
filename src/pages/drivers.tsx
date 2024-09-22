@@ -18,10 +18,10 @@ const DriversPage = () => {
       setWindowSize([window.innerWidth, window.innerHeight]);
     };
 
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
 
@@ -41,13 +41,15 @@ const DriversPage = () => {
           <Flex
             align="center"
             justify="center"
-            sx={{ height: "100%", width: "100%" }}>
+            sx={{ height: "100%", width: "100%" }}
+          >
             <Loader />
           </Flex>
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "100%", margin: "1em auto", height: "100%" }}
+          >
             {drivers.items.length <= 0 ? (
               <Text>Une erreur s'est produite lors de la requête</Text>
             ) : (
