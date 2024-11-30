@@ -21,10 +21,10 @@ const ServicesPage = () => {
       setWindowSize([window.innerWidth, window.innerHeight]);
     };
 
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
   const dispatch = useDispatch<any>();
@@ -45,13 +45,15 @@ const ServicesPage = () => {
           <Flex
             align="center"
             justify="center"
-            sx={{ height: "100%", width: "100%" }}>
+            sx={{ height: "100%", width: "100%" }}
+          >
             <Loader />
           </Flex>
         ) : (
           <Flex
             direction="column"
-            sx={{ width: "100%", margin: "1em auto", height: "100%" }}>
+            sx={{ width: "100%", margin: "1em auto", height: "100%" }}
+          >
             <Group position="left">
               <Button
                 onClick={open}
@@ -66,7 +68,8 @@ const ServicesPage = () => {
                       background: "#01101E",
                     },
                   },
-                ]}>
+                ]}
+              >
                 Ajouter une voiture
               </Button>
             </Group>
@@ -82,7 +85,7 @@ const ServicesPage = () => {
         )}
       </PageLayoutTemplate>
       <CarPopup
-        title="Ajouter une voiture"
+        title="Ajouter un  service "
         content={<AddPepoCarForm close={close} />}
         open={open}
         close={close}
