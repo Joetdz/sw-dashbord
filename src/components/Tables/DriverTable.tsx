@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
   th: {
     padding: "0 !important",
-    fontSize: ".8em !important"
+    fontSize: ".8em !important",
   },
 
   control: {
@@ -52,7 +52,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface RowData {
-  uid: string;
+  id: string;
   name: string;
   password: string;
   phone: string;
@@ -109,14 +109,14 @@ function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
   return data.filter((item) =>
     keys(data[0]).some((key) =>
-      (`${item[key]}` as string).toLowerCase().includes(query),
-    ),
+      (`${item[key]}` as string).toLowerCase().includes(query)
+    )
   );
 }
 
 function sortData(
   data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string },
+  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
 ) {
   const { sortBy } = payload;
 
@@ -128,12 +128,12 @@ function sortData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
         return (`${b[sortBy]}` as string).localeCompare(
-          `${a[sortBy]}` as string,
+          `${a[sortBy]}` as string
         );
       }
       return (`${a[sortBy]}` as string).localeCompare(`${b[sortBy]}` as string);
     }),
-    payload.search,
+    payload.search
   );
 }
 
@@ -158,7 +158,7 @@ export function DriverTable({ data }: TableSortProps) {
 
     setSearch(value);
     setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value }),
+      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
     );
 
     setCurrentPage(1);
@@ -168,20 +168,20 @@ export function DriverTable({ data }: TableSortProps) {
     setCurrentPage(page);
   };
 
-
   const dispatch = useDispatch<any>();
+  console.log("sorte ", sortedData);
 
   const rows = sortedData.map((row, index) => (
-    <tr key={row.uid}>
+    <tr key={row.id}>
       <td>{index + 1}</td>
       <td>
-        <Link to={`/drivers/${row.uid}`}>{row.name}</Link>
+        <Link to={`/drivers/${row.id}`}>{row.name}</Link>
       </td>
       <td>
-        <Link to={`/drivers/${row.uid}`}>{row.phone}</Link>
+        <Link to={`/drivers/${row.id}`}>{row.phone}</Link>
       </td>
       <td>
-        <Link to={`/drivers/${row.uid}`}>{row.car && row.car.model}</Link>
+        <Link to={`/drivers/${row.id}`}>{row.car && row.car.model}</Link>
       </td>
       <td>
         {row.active ? (
@@ -194,27 +194,29 @@ export function DriverTable({ data }: TableSortProps) {
         {row.active ? (
           <Button
             onClick={async () => {
-              await dispatch(deactivateDriver(row.uid));
+              await dispatch(deactivateDriver(row.id));
               await dispatch(getDrivers());
             }}
             sx={{
               background: "#F31D1D",
               borderRadius: "25px",
               fontSize: ".8em",
-            }}>
+            }}
+          >
             Désactiver
           </Button>
         ) : (
           <Button
             onClick={async () => {
-              await dispatch(activateDriver(row.uid));
+              await dispatch(activateDriver(row.id));
               await dispatch(getDrivers());
             }}
             sx={{
               background: "#0C3966",
               borderRadius: "25px",
               fontSize: ".8em",
-            }}>
+            }}
+          >
             Activer
           </Button>
         )}
@@ -247,37 +249,43 @@ export function DriverTable({ data }: TableSortProps) {
             <Th
               sorted={sortBy === "name"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}>
+              onSort={() => setSorting("name")}
+            >
               #
             </Th>
             <Th
               sorted={sortBy === "name"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}>
+              onSort={() => setSorting("name")}
+            >
               Nom
             </Th>
             <Th
               sorted={sortBy === "phone"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("phone")}>
+              onSort={() => setSorting("phone")}
+            >
               Téléphone
             </Th>
             <Th
               sorted={sortBy === "car"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("car")}>
+              onSort={() => setSorting("car")}
+            >
               Véhicule utilisé
             </Th>
             <Th
               sorted={sortBy === "active"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("active")}>
+              onSort={() => setSorting("active")}
+            >
               Compte
             </Th>
             <Th
               sorted={sortBy === "active"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("active")}>
+              onSort={() => setSorting("active")}
+            >
               Actions
             </Th>
           </tr>
@@ -311,7 +319,8 @@ export function DriverTable({ data }: TableSortProps) {
                 background: "#01101E",
               },
             },
-          ]}>
+          ]}
+        >
           Page précédente
         </Button>
         <span>{`Page ${currentPage}`}</span>
@@ -329,10 +338,11 @@ export function DriverTable({ data }: TableSortProps) {
                 background: "#01101E",
               },
             },
-          ]}>
+          ]}
+        >
           Page suivante
         </Button>
       </Group>
-    </ScrollArea >
+    </ScrollArea>
   );
 }

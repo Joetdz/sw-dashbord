@@ -97,10 +97,10 @@ const useStyles = createStyles((theme) => ({
 const data = [
   { link: "/", label: "Accueil", icon: IconHome2 },
   // { link: "", label: "Notifications", icon: IconBellRinging },
-  { link: "/trips", label: "Courses", icon: IconBrandTripadvisor },
+  // { link: "/trips", label: "Courses", icon: IconBrandTripadvisor },
   { link: "/passengers", label: "Passagers", icon: IconUsers },
   { link: "/drivers", label: "Chauffeurs", icon: IconIdBadge2 },
-  { link: "/cars", label: "Voitures", icon: IconCar },
+  // { link: "/cars", label: "Voitures", icon: IconCar },
   { link: "/services", label: "Services", icon: IconHotelService },
   { link: "/settings", label: "Paramètres", icon: IconSettings },
   { link: "/users", label: "Utilisateurs", icon: IconUsersGroup },

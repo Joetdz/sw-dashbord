@@ -98,7 +98,7 @@ const LoginPage = (props: PaperProps) => {
             await toast.promise(
               axios({
                 method: "POST",
-                url: `${process.env.REACT_APP_API_URL}auth/login`,
+                url: `${process.env.REACT_APP_API_URL}auth/admin-login`,
                 headers: {
                   "Content-Type": "application/json",
                 },
